@@ -8,9 +8,9 @@ namespace Terraria
 	public class TerrainVoid
 	{
 		public readonly int index;
-		public List<GridCell<TerrainCell>> cells;
+		public List<TerrainCell> cells;
 
-		public TerrainVoid(List<GridCell<TerrainCell>> cells, int index)
+		public TerrainVoid(List<TerrainCell> cells, int index)
 		{
 			this.cells = cells;
 			this.index = index;
@@ -19,19 +19,19 @@ namespace Terraria
 	
 	public class TerrainDataOperations
 	{
-		class WaveItem
+		class WaveCell : GridCell
 		{
 			public int distance;
 			public int group;
 
-			public WaveItem( int distance, int group)
+			public WaveCell(Cell c, int distance, int group) : base(c)
 			{
 				this.distance = distance;
 				this.group = group;
 			}
 		}
- 
-		
+
+
 		TerrainData terrainData; 
 
 		
@@ -43,29 +43,29 @@ namespace Terraria
 			this.terrainData = terrainData;
 		}
 
-		Grid<WaveItem> GetNewGrid()
+		Grid<WaveCell> GetNewGrid()
 		{
-			Grid<WaveItem> grid = new Grid<WaveItem>(terrainData.width, terrainData.width);
+			Grid<WaveCell> grid = new Grid<WaveCell>(terrainData.width, terrainData.width);
 
-			foreach (GridCell<TerrainCell> terrainCell in terrainData.AllCells())
-				grid.SetCell(terrainCell.Cell, new WaveItem(int.MaxValue, -1));
+			foreach (TerrainCell terrainCell in terrainData.AllCells())
+				grid.SetCell(terrainCell.cell, new WaveCell(terrainCell.cell, int.MaxValue, -1));
 
 			return grid;
 		}
 
 		public List<TerrainVoid>  FindVoids()
 		{
-			Grid<WaveItem> grid  = GetNewGrid(); 
+			Grid<WaveCell> grid  = GetNewGrid(); 
 			List<TerrainVoid> terrainVoids = new List<TerrainVoid>(32);
-			foreach (GridCell<TerrainCell> terrainCell in terrainData.AllCells())
+			foreach (TerrainCell terrainCell in terrainData.AllCells())
 			{
 				//var c = grid[terrainCell.Cell];
 				//c.
-				if (terrainCell.value.density <= 0 && grid[terrainCell.Cell].group < 0)
+				if (terrainCell.density <= 0 && grid[terrainCell.cell].group < 0)
 				{
-					List<GridCell<TerrainCell>> newVoidCells = Wave(terrainCell.Cell);
-					foreach (GridCell<TerrainCell> voidCell in newVoidCells)
-						grid[voidCell.Cell].group = terrainVoids.Count;
+					List<TerrainCell> newVoidCells = Wave(terrainCell.cell);
+					foreach (TerrainCell voidCell in newVoidCells)
+						grid[voidCell.cell].group = terrainVoids.Count;
 					
 					TerrainVoid newVoid = new TerrainVoid(newVoidCells, terrainVoids.Count);
 					terrainVoids.Add(newVoid);
@@ -75,14 +75,14 @@ namespace Terraria
 			return terrainVoids;
 		}
 		
-		public List<GridCell<TerrainCell>> Wave(Cell cell)
+		public List<TerrainCell> Wave(Cell cell)
 		{
-			Grid<WaveItem> grid = GetNewGrid();
+			Grid<WaveCell> waveGrid = GetNewGrid();
 
-			List<GridCell<TerrainCell>> result = new List<GridCell<TerrainCell>>(grid.CellCount);
-			Queue<Cell> queue = new Queue<Cell>(grid.CellCount);
+			List<TerrainCell> result = new List<TerrainCell>(waveGrid.CellCount);
+			Queue<Cell> queue = new Queue<Cell>(waveGrid.CellCount);
 			queue.Enqueue(cell);
-			grid[cell].distance = 0;
+			waveGrid[cell].distance = 0;
 
 			while (queue.Count > 0)
 			{
@@ -90,17 +90,17 @@ namespace Terraria
 				TerrainCell item = terrainData[c];
 				if (item.density <= 0)
 				{
-					GridCell<TerrainCell> terrainCell = terrainData.GetCell(c);
+					TerrainCell terrainCell = terrainData.GetCell(c);
 					result.Add(terrainCell);
  
-					int distance = grid[c].distance + 1;
-					foreach (GridCell<TerrainCell> near in terrainCell.GetNearCells())
+					int distance = waveGrid[c].distance + 1;
+					foreach (TerrainCell near in terrainData.GetNearCells(terrainCell))
 					{  
-						if ( near.value.density <= 0 &&
-						     distance < grid[near.Cell].distance)
+						if ( near.density <= 0 &&
+						     distance < waveGrid[near].distance)
 						{
-							grid[near.Cell].distance = distance;
-							queue.Enqueue(near.Cell);
+							waveGrid[near].distance = distance;
+							queue.Enqueue(near);
 						}
 					}
 				}

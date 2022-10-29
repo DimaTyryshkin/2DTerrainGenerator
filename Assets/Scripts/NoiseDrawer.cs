@@ -63,10 +63,10 @@ namespace Terraria
 
 
 			TerrainDataOperations operations = new TerrainDataOperations(terrainData);
-			List<GridCell<TerrainCell>> skyCells = operations.Wave(cell);
+			List<TerrainCell> skyCells = operations.Wave(cell);
 
-			foreach (GridCell<TerrainCell> c in skyCells)
-				AddMark(c.Cell);
+			foreach (TerrainCell c in skyCells)
+				AddMark(c);
 		}
 
 		public void MarkVoids()
@@ -77,10 +77,10 @@ namespace Terraria
 			markersRoot = CreateRoot(markersRoot, "markerRoot");
 			foreach (TerrainVoid terrainVoid in voids)
 			{
-				Color color = Random.ColorHSV();
-				foreach (GridCell<TerrainCell> cell in terrainVoid.cells)
+				Color color = Random.ColorHSV(0, 1, 0, 1, 1, 1); //Яркий цвет
+				foreach (TerrainCell cell in terrainVoid.cells)
 				{
-					AddMark(cell.Cell)
+					AddMark(cell)
 						.SetText(terrainVoid.index.ToString())
 						.SetColor(color);
 				}
@@ -126,25 +126,23 @@ namespace Terraria
 
 		private void FindGras()
 		{
-			foreach (GridCell<TerrainCell> cell in FindGras(terrainData.AllCells()))
+			foreach (TerrainCell cell in FindGras(terrainData))
 			{
-				cell.value.view.SetHeadColor(settings.colorSchema.grassColor);
+				cell.view.SetHeadColor(settings.colorSchema.grassColor);
 			}
 		}
 
-		List<GridCell<TerrainCell>> FindGras(IEnumerable<GridCell<TerrainCell>> collection)
-		{
-			List<GridCell<TerrainCell>> result = new List<GridCell<TerrainCell>>(1024);
-			foreach (GridCell<TerrainCell> cell in collection)
+		List<TerrainCell> FindGras(TerrainData terrainData)
+		{ 
+			List<TerrainCell> result = new List<TerrainCell>(1024);
+			foreach (TerrainCell cell in terrainData.AllCells())
 			{
-				if (cell.value.density > 0)
+				if (cell.density > 0)
 				{
-					var up = cell.UpCell;
+					var up = terrainData.GetUpCell(cell);
 
-					if (up != null && up.value.density <= 0)
-					{
+					if (up != null && up.density <= 0)
 						result.Add(cell);
-					}
 				}
 			}
 
@@ -187,14 +185,13 @@ namespace Terraria
 
 					Square square = squaresRoot.InstantiateAsChild(settings.squarePrefab);
 					square.transform.position = CellToWorldPos(x, y); 
-					terrainData.SetCell(x, y, new TerrainCell(density, square));
+					terrainData.SetCell(cell, new TerrainCell(cell, density, square));
 				}
 			}
 			
 			// SetColor
-			foreach (GridCell<TerrainCell> gridCell in terrainData.AllCells())
+			foreach (TerrainCell terrainCell in terrainData.AllCells())
 			{
-				TerrainCell terrainCell = gridCell.value;
 				float density = terrainCell.density;
 				if (density > 0)
 					terrainCell.view.SetColor(settings.colorSchema.ColorFromDensity(density, 0, maxDensity));
