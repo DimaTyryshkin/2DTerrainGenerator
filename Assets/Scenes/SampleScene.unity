@@ -358,7 +358,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   squarePrefab: {fileID: 9102061690234185137, guid: 68f93d536887ab84c9a7a7dd5bd53806, type: 3}
-  noiseGenerator: {fileID: 11400000, guid: b15dfb2a07a080249866e427748600db, type: 2}
+  noiseGenerator: {fileID: 11400000, guid: d4b17b6e65723f647afed1713546a1dc, type: 2}
   terrain: {fileID: 11400000, guid: 8da5a57f59087b549bf5f8b5d4003e1f, type: 2}
   colorSchema: {fileID: 11400000, guid: bfa354cb15c47764e909cecdeba68f9d, type: 2}
   marker: {fileID: 9102061690234185136, guid: e6cbe49d5d528a241b4e060fcaaed5aa, type: 3}
@@ -541,7 +541,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   squarePrefab: {fileID: 9102061690234185137, guid: e6cbe49d5d528a241b4e060fcaaed5aa, type: 3}
-  noiseGenerator: {fileID: 11400000, guid: c4cbe80144c558842bcb9f6af88eab8a, type: 2}
+  noiseGenerator: {fileID: 11400000, guid: 3e35abdc9496bd84fb9354b7a56a047f, type: 2}
   terrain: {fileID: 11400000, guid: 8da5a57f59087b549bf5f8b5d4003e1f, type: 2}
   colorSchema: {fileID: 11400000, guid: bfa354cb15c47764e909cecdeba68f9d, type: 2}
   marker: {fileID: 0}
