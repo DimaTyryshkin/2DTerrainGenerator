@@ -7,10 +7,22 @@ using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 using Terraria.NoiseGeneration;
+using UnityEngine.Assertions;
 using UnityEngine.UIElements;
 
 namespace Terraria
 {
+	class ViewCell : GridCell
+	{
+		public Square view;
+ 
+		public ViewCell(Cell c, Square view) : base(c)
+		{
+			Assert.IsNotNull(view);
+			this.view = view;
+		}
+	}
+
 	public class NoiseDrawer : MonoBehaviour
 	{  
 		[SerializeField, IsntNull] NoiseGeneratorAbstract noiseGenerator;  
@@ -24,6 +36,7 @@ namespace Terraria
 		TerrainData terrainData; 
 		Vector3 offset;
 		Rect viewFieldRect;
+		Grid<ViewCell> viewGrid;
 
 		public TerrainData TerrainData => terrainData;
 		public Terrain Terrain => settings.terrain;
@@ -60,10 +73,7 @@ namespace Terraria
 		public void MarkSky(Cell cell)
 		{
 			markersRoot = CreateRoot(markersRoot, "markerRoot");
-
-
-			TerrainDataOperations operations = new TerrainDataOperations(terrainData);
-			List<TerrainCell> skyCells = operations.Wave(cell);
+			List<TerrainCell> skyCells = terrainData.Wave(cell);
 
 			foreach (TerrainCell c in skyCells)
 				AddMark(c);
@@ -71,8 +81,7 @@ namespace Terraria
 
 		public void MarkVoids()
 		{
-			TerrainDataOperations operations = new TerrainDataOperations(terrainData);
-			List<TerrainVoid> voids = operations.FindVoids();
+			List<TerrainVoid> voids = terrainData.FindVoids();
 
 			markersRoot = CreateRoot(markersRoot, "markerRoot");
 			foreach (TerrainVoid terrainVoid in voids)
@@ -104,7 +113,9 @@ namespace Terraria
 
 
 		void Clear()
-		{ 
+		{
+			viewGrid = null;
+			
 			if (squaresRoot)
 				Destroy(squaresRoot.gameObject);
 			
@@ -124,89 +135,35 @@ namespace Terraria
 			return newRoot;
 		}
 
-		private void FindGras()
+		void FindGras()
 		{
-			foreach (TerrainCell cell in FindGras(terrainData))
-			{
-				cell.view.SetHeadColor(settings.colorSchema.grassColor);
-			}
+			foreach (TerrainCell cell in terrainData.FindGras())
+				viewGrid[cell].view.SetHeadColor(settings.colorSchema.grassColor);
 		}
 
-		List<TerrainCell> FindGras(TerrainData terrainData)
-		{ 
-			List<TerrainCell> result = new List<TerrainCell>(1024);
-			foreach (TerrainCell cell in terrainData.AllCells())
-			{
-				if (cell.density > 0)
-				{
-					var up = terrainData.GetUpCell(cell);
-
-					if (up != null && up.density <= 0)
-						result.Add(cell);
-				}
-			}
-
-			return result;
-		}
-
-		private void GenerateDensityField()
+		void GenerateDensityField()
 		{
-			squaresRoot = CreateRoot(squaresRoot, "root");
 			float offset = 0.5f;
 			this.offset = new Vector3(offset, offset, 0);
 
-			int squaresOnWidth = settings.terrain.Width;
-			int squaresOnHeight = settings.terrain.Height;
-			terrainData = new TerrainData(squaresOnWidth, squaresOnHeight);
-
-			Cell minCell = new Cell(0, 0);
-			Cell maxCell = minCell;
-			float minDensity = float.MaxValue;
-			float maxDensity = float.MinValue;
-			for (int x = 0; x < squaresOnWidth; x++)
-			{
-				for (int y = 0; y < squaresOnHeight; y++)
-				{
-					Vector2 noisePoint = settings.terrain.TerrainPointToNoisePoint(x + offset, y + offset);
-					float density = noiseGenerator.GetPoint(noisePoint.x, noisePoint.y);
-
-					Cell cell = new Cell(x, y);
-					if (density > maxDensity)
-					{
-						maxCell = cell;
-						maxDensity = density;
-					}
+			terrainData = new TerrainData(settings.terrain, noiseGenerator);
+			terrainData.GenerateDensityField();
+			viewGrid = new Grid<ViewCell>(terrainData.width, terrainData.height);
+			squaresRoot = CreateRoot(squaresRoot, "root");
 			
-					if (density < minDensity)
-					{
-						minCell = cell;
-						minDensity = density;
-					}
-
-					Square square = squaresRoot.InstantiateAsChild(settings.squarePrefab);
-					square.transform.position = CellToWorldPos(x, y); 
-					terrainData.SetCell(cell, new TerrainCell(cell, density, square));
-				}
-			}
-			
-			// SetColor
 			foreach (TerrainCell terrainCell in terrainData.AllCells())
 			{
-				float density = terrainCell.density;
-				if (density > 0)
-					terrainCell.view.SetColor(settings.colorSchema.ColorFromDensity(density, 0, maxDensity));
+				Square square = squaresRoot.InstantiateAsChild(settings.squarePrefab);
+				square.transform.position = CellToWorldPos(terrainCell);
+				viewGrid.SetCell(terrainCell, new ViewCell(terrainCell, square));
+
+				if (terrainCell.density > 0)
+					square.SetColor(settings.colorSchema.ColorFromDensity(terrainCell.density, 0, terrainData.MaxDensity));
 				else
-					terrainCell.view.Hide();
+					square.Hide();
 			}
-
-			Debug.Log($"maxDensity='{maxDensity}'");
 		}
 
-		Vector3 CellToWorldPos(int x, int y)
-		{
-			return new Vector3(x , y , 0) + transform.position + offset;
-		}
-		
 		Vector3 CellToWorldPos(Cell c)
 		{
 			return new Vector3(c.x , c.y , 0) + transform.position + offset;

@@ -7,12 +7,7 @@ namespace Terraria
 		public readonly Cell cell;
 
 		public static implicit operator Cell(GridCell cell) => cell.cell;
-
-		public GridCell(int x, int y)
-		{
-			cell = new Cell(x, y);
-		}
-
+ 
 		public GridCell(Cell c)
 		{
 			cell = c;
