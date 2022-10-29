@@ -56,6 +56,8 @@ namespace Terraria
 			List<TerrainVoid> terrainVoids = new List<TerrainVoid>(32);
 			foreach (GridCell<TerrainCell> terrainCell in terrainData.AllCells())
 			{
+				//var c = grid[terrainCell.Cell];
+				//c.
 				if (terrainCell.value.density <= 0 && grid[terrainCell.Cell].group < 0)
 				{
 					List<GridCell<TerrainCell>> newVoidCells = Wave(terrainCell.Cell);
@@ -72,10 +74,10 @@ namespace Terraria
 		
 		public List<GridCell<TerrainCell>> Wave(Cell cell)
 		{
-			Grid<WaveItem> grid  = GetNewGrid(); 
-			
-			List<GridCell<TerrainCell>> result = new List<GridCell<TerrainCell>>(1024 * 10);
-			Queue<Cell> queue = new Queue<Cell>(1024 * 10);
+			Grid<WaveItem> grid = GetNewGrid();
+
+			List<GridCell<TerrainCell>> result = new List<GridCell<TerrainCell>>(grid.CellCount);
+			Queue<Cell> queue = new Queue<Cell>(grid.CellCount);
 			queue.Enqueue(cell);
 			grid[cell].distance = 0;
 

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f6fe8e9c1c4c56ae5e0b7373653388, type: 3}
+  m_Name: NoiseDrawerSettings
+  m_EditorClassIdentifier: 
+  terrain: {fileID: 11400000, guid: 8da5a57f59087b549bf5f8b5d4003e1f, type: 2}
+  colorSchema: {fileID: 11400000, guid: bfa354cb15c47764e909cecdeba68f9d, type: 2}
+  squarePrefab: {fileID: -2226902483907997631, guid: 68f93d536887ab84c9a7a7dd5bd53806, type: 3}
+  marker: {fileID: 9102061690234185136, guid: e6cbe49d5d528a241b4e060fcaaed5aa, type: 3}

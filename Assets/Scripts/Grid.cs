@@ -73,6 +73,8 @@ namespace Terraria
 		public readonly int width;
 		GridCell<T>[] cells;
 
+		public int CellCount => height * width;
+		
 		public T this[Cell c]
 		{
 			get { return GetCell(c).value; }

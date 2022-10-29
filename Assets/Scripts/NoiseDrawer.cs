@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics; 
 using NaughtyAttributes;
+using SiberianWellness.Common;
+using SiberianWellness.NotNullValidation;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -9,16 +11,12 @@ using Terraria.NoiseGeneration;
 namespace Terraria
 {
 	public class NoiseDrawer : MonoBehaviour
-	{
-		[SerializeField] private SpriteRenderer squarePrefab;
-		[SerializeField] private NoiseGeneratorAbstract noiseGenerator;
-		[SerializeField] private Terrain terrain;
-
-		[Space] [SerializeField] private ColorSchema colorSchema;
-		[SerializeField] private GameObject marker;
-
-
-		[SerializeField] bool drawRect;
+	{  
+		[SerializeField, IsntNull] NoiseGeneratorAbstract noiseGenerator;  
+		[SerializeField, IsntNull] bool markVoids;
+		
+		[Space]
+		[SerializeField, IsntNull] NoiseDrawerSettings settings;
 
 		Transform squaresRoot;
 		Transform markersRoot;
@@ -27,8 +25,8 @@ namespace Terraria
 		Rect viewFieldRect;
 
 		public TerrainData TerrainData => terrainData;
-		public Terrain Terrain => terrain;
-		public Vector2 Size =>  new Vector3(terrain.Width, terrain.Height);
+		public Terrain Terrain => settings.terrain;
+		public Vector2 Size =>  new Vector3(settings.terrain.Width, settings.terrain.Height);
 		public Vector2 Center => (Vector2)transform.position + Size * 0.5f;
 		
 
@@ -40,15 +38,20 @@ namespace Terraria
 		[Button]
 		public void Draw()
 		{
+			Clear();
+			
 			Stopwatch watch = new Stopwatch();
 			
 			watch.Start();
-			viewFieldRect = new Rect(transform.position, new Vector2(terrain.Width, terrain.Height));
+			viewFieldRect = new Rect(transform.position, new Vector2(settings.terrain.Width, settings.terrain.Height));
 			
 			GenerateDensityField();
 			FindGras();
 			//MarkSky(new Cell(0, terrainData.height - 1));
-			MarkVoids();
+			
+			if(markVoids)
+				MarkVoids();
+			
 			watch.Stop();
 			Debug.Log($"Draw '{watch.Elapsed.TotalSeconds}' sec");
 		}
@@ -91,11 +94,21 @@ namespace Terraria
 		
 		Mark AddMark(Vector3 pos)
 		{
-			GameObject newMarker = Instantiate(marker, markersRoot);
+			GameObject newMarker = Instantiate(settings.marker, markersRoot);
 			newMarker.transform.position = pos;
 			newMarker.transform.localScale = Vector3.one;
 
 			return newMarker.GetComponent<Mark>();
+		}
+
+
+		void Clear()
+		{ 
+			if (squaresRoot)
+				Destroy(squaresRoot.gameObject);
+			
+			if (markersRoot)
+				Destroy(markersRoot.gameObject);
 		}
 
 		Transform CreateRoot(Transform oldRoot, string rootName)
@@ -114,7 +127,7 @@ namespace Terraria
 		{
 			foreach (GridCell<TerrainCell> cell in FindGras(terrainData.AllCells()))
 			{
-				cell.value.view.SetHeadColor(colorSchema.grassColor);
+				cell.value.view.SetHeadColor(settings.colorSchema.grassColor);
 			}
 		}
 
@@ -143,8 +156,8 @@ namespace Terraria
 			float offset = 0.5f;
 			this.offset = new Vector3(offset, offset, 0);
 
-			int squaresOnWidth = terrain.Width;
-			int squaresOnHeight = terrain.Height;
+			int squaresOnWidth = settings.terrain.Width;
+			int squaresOnHeight = settings.terrain.Height;
 			terrainData = new TerrainData(squaresOnWidth, squaresOnHeight);
 
 			float maxDensity = float.MinValue;
@@ -152,18 +165,17 @@ namespace Terraria
 			{
 				for (int y = 0; y < squaresOnHeight; y++)
 				{
-					Vector2 noisePoint = terrain.TerrainPointToNoisePoint(x + offset, y + offset);
+					Vector2 noisePoint = settings.terrain.TerrainPointToNoisePoint(x + offset, y + offset);
 					float density = noiseGenerator.GetPoint(noisePoint.x, noisePoint.y);
 
 					if (density > maxDensity)
 						maxDensity = density;
 
-					Square square = null;
-					GameObject newSquare = Instantiate(squarePrefab.gameObject, CellToWorldPos(x, y), Quaternion.identity, squaresRoot);
-					square = newSquare.GetComponent<Square>();
+					Square square = squaresRoot.InstantiateAsChild(settings.squarePrefab);
+					square.transform.position = CellToWorldPos(x, y);
 					
 					if (density > 0)
-						square.SetColor(ColorFromDensity(density));
+						square.SetColor(settings.colorSchema.ColorFromDensity(density));
 					else
 						square.Hide();
 
@@ -199,14 +211,9 @@ namespace Terraria
 #if UNITY_EDITOR
 		void OnDrawGizmos()
 		{
-			if (terrain)
+			if (settings.terrain)
 				Gizmos.DrawWireCube(Center, Size);
 		}
 #endif
-
-		Color ColorFromDensity(float density)
-		{
-			return Color.Lerp(colorSchema.minDensityColor, colorSchema.maxDensityColor, density);
-		}
 	}
 }

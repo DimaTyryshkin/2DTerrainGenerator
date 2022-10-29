@@ -152,12 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f88896f142e4bbf9a188a688ab3200d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  squarePrefab: {fileID: 9102061690234185137, guid: e6cbe49d5d528a241b4e060fcaaed5aa, type: 3}
   noiseGenerator: {fileID: 11400000, guid: 843036b95269b074b9f527fa9ecd92ab, type: 2}
-  terrain: {fileID: 11400000, guid: 8da5a57f59087b549bf5f8b5d4003e1f, type: 2}
-  colorSchema: {fileID: 11400000, guid: bfa354cb15c47764e909cecdeba68f9d, type: 2}
-  marker: {fileID: 0}
-  drawRect: 0
+  markVoids: 0
+  settings: {fileID: 11400000, guid: 3913981ffd4071a4bb61d1af43d14993, type: 2}
 --- !u!4 &485461365
 Transform:
   m_ObjectHideFlags: 0
@@ -325,7 +322,7 @@ GameObject:
   - component: {fileID: 886491251}
   - component: {fileID: 886491252}
   m_Layer: 0
-  m_Name: Water-Smal-Big-Summ (1)
+  m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -339,7 +336,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 886491250}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 154.9, y: -2.9, z: 0}
+  m_LocalPosition: {x: 154.9, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2062786514}
@@ -357,12 +354,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f88896f142e4bbf9a188a688ab3200d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  squarePrefab: {fileID: 9102061690234185137, guid: 68f93d536887ab84c9a7a7dd5bd53806, type: 3}
   noiseGenerator: {fileID: 11400000, guid: d4b17b6e65723f647afed1713546a1dc, type: 2}
-  terrain: {fileID: 11400000, guid: 8da5a57f59087b549bf5f8b5d4003e1f, type: 2}
-  colorSchema: {fileID: 11400000, guid: bfa354cb15c47764e909cecdeba68f9d, type: 2}
-  marker: {fileID: 9102061690234185136, guid: e6cbe49d5d528a241b4e060fcaaed5aa, type: 3}
-  drawRect: 0
+  markVoids: 0
+  settings: {fileID: 11400000, guid: 3913981ffd4071a4bb61d1af43d14993, type: 2}
 --- !u!1 &1041208808
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,12 +400,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f88896f142e4bbf9a188a688ab3200d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  squarePrefab: {fileID: 9102061690234185137, guid: e6cbe49d5d528a241b4e060fcaaed5aa, type: 3}
-  noiseGenerator: {fileID: 11400000, guid: cb96a4270ba85a743858bfe94c43ed0d, type: 2}
-  terrain: {fileID: 11400000, guid: 8da5a57f59087b549bf5f8b5d4003e1f, type: 2}
-  colorSchema: {fileID: 11400000, guid: bfa354cb15c47764e909cecdeba68f9d, type: 2}
-  marker: {fileID: 0}
-  drawRect: 0
+  noiseGenerator: {fileID: 0}
+  markVoids: 0
+  settings: {fileID: 11400000, guid: 3913981ffd4071a4bb61d1af43d14993, type: 2}
 --- !u!1 &1883994423
 GameObject:
   m_ObjectHideFlags: 0
@@ -441,12 +432,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f88896f142e4bbf9a188a688ab3200d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  squarePrefab: {fileID: 9102061690234185137, guid: e6cbe49d5d528a241b4e060fcaaed5aa, type: 3}
   noiseGenerator: {fileID: 11400000, guid: b15dfb2a07a080249866e427748600db, type: 2}
-  terrain: {fileID: 11400000, guid: 8da5a57f59087b549bf5f8b5d4003e1f, type: 2}
-  colorSchema: {fileID: 11400000, guid: bfa354cb15c47764e909cecdeba68f9d, type: 2}
-  marker: {fileID: 0}
-  drawRect: 0
+  markVoids: 0
+  settings: {fileID: 11400000, guid: 3913981ffd4071a4bb61d1af43d14993, type: 2}
 --- !u!4 &1883994425
 Transform:
   m_ObjectHideFlags: 0
@@ -505,12 +493,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f88896f142e4bbf9a188a688ab3200d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  squarePrefab: {fileID: 9102061690234185137, guid: e6cbe49d5d528a241b4e060fcaaed5aa, type: 3}
-  noiseGenerator: {fileID: 11400000, guid: a95cf22574a264c4883f762e0e184ba6, type: 2}
-  terrain: {fileID: 11400000, guid: 8da5a57f59087b549bf5f8b5d4003e1f, type: 2}
-  colorSchema: {fileID: 11400000, guid: bfa354cb15c47764e909cecdeba68f9d, type: 2}
-  marker: {fileID: 0}
-  drawRect: 0
+  noiseGenerator: {fileID: 0}
+  markVoids: 0
+  settings: {fileID: 11400000, guid: 3913981ffd4071a4bb61d1af43d14993, type: 2}
 --- !u!1 &2062786512
 GameObject:
   m_ObjectHideFlags: 0
@@ -522,7 +507,7 @@ GameObject:
   - component: {fileID: 2062786514}
   - component: {fileID: 2062786513}
   m_Layer: 0
-  m_Name: Smal-Big-Summ
+  m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -535,17 +520,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2062786512}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f88896f142e4bbf9a188a688ab3200d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  squarePrefab: {fileID: 9102061690234185137, guid: e6cbe49d5d528a241b4e060fcaaed5aa, type: 3}
-  noiseGenerator: {fileID: 11400000, guid: 3e35abdc9496bd84fb9354b7a56a047f, type: 2}
-  terrain: {fileID: 11400000, guid: 8da5a57f59087b549bf5f8b5d4003e1f, type: 2}
-  colorSchema: {fileID: 11400000, guid: bfa354cb15c47764e909cecdeba68f9d, type: 2}
-  marker: {fileID: 0}
-  drawRect: 0
+  noiseGenerator: {fileID: 11400000, guid: 75900be882d83a94e87f47f3f797f436, type: 2}
+  markVoids: 0
+  settings: {fileID: 11400000, guid: 3913981ffd4071a4bb61d1af43d14993, type: 2}
 --- !u!4 &2062786514
 Transform:
   m_ObjectHideFlags: 0
