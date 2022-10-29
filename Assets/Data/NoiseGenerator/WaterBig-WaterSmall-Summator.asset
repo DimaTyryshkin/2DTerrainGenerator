@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed3f39c02026438e90a56fb9d510681b, type: 3}
+  m_Name: WaterBig-WaterSmall-Summator
+  m_EditorClassIdentifier: 
+  noises:
+  - noise: {fileID: 11400000, guid: cb96a4270ba85a743858bfe94c43ed0d, type: 2}
+    weight: 1
+  - noise: {fileID: 11400000, guid: a95cf22574a264c4883f762e0e184ba6, type: 2}
+    weight: 1

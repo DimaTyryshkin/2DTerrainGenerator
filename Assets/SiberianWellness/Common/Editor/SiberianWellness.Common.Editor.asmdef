@@ -1,0 +1,17 @@
+{
+    "name": "SiberianWellness.Common.Editor",
+    "references": [
+        "GUID:8796e31d6ebfd0b41ba06ef21202575e"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}
