@@ -34,6 +34,9 @@ namespace Terraria
 		
 		TerrainData terrainData; 
 
+		
+		//--methods
+		
 		public TerrainDataOperations(TerrainData terrainData)
 		{
 			Assert.IsNotNull(terrainData);

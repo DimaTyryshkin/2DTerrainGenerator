@@ -7,6 +7,7 @@ using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 using Terraria.NoiseGeneration;
+using UnityEngine.UIElements;
 
 namespace Terraria
 {
@@ -160,6 +161,9 @@ namespace Terraria
 			int squaresOnHeight = settings.terrain.Height;
 			terrainData = new TerrainData(squaresOnWidth, squaresOnHeight);
 
+			Cell minCell = new Cell(0, 0);
+			Cell maxCell = minCell;
+			float minDensity = float.MaxValue;
 			float maxDensity = float.MinValue;
 			for (int x = 0; x < squaresOnWidth; x++)
 			{
@@ -168,19 +172,34 @@ namespace Terraria
 					Vector2 noisePoint = settings.terrain.TerrainPointToNoisePoint(x + offset, y + offset);
 					float density = noiseGenerator.GetPoint(noisePoint.x, noisePoint.y);
 
+					Cell cell = new Cell(x, y);
 					if (density > maxDensity)
+					{
+						maxCell = cell;
 						maxDensity = density;
+					}
+			
+					if (density < minDensity)
+					{
+						minCell = cell;
+						minDensity = density;
+					}
 
 					Square square = squaresRoot.InstantiateAsChild(settings.squarePrefab);
-					square.transform.position = CellToWorldPos(x, y);
-					
-					if (density > 0)
-						square.SetColor(settings.colorSchema.ColorFromDensity(density));
-					else
-						square.Hide();
-
+					square.transform.position = CellToWorldPos(x, y); 
 					terrainData.SetCell(x, y, new TerrainCell(density, square));
 				}
+			}
+			
+			// SetColor
+			foreach (GridCell<TerrainCell> gridCell in terrainData.AllCells())
+			{
+				TerrainCell terrainCell = gridCell.value;
+				float density = terrainCell.density;
+				if (density > 0)
+					terrainCell.view.SetColor(settings.colorSchema.ColorFromDensity(density, 0, maxDensity));
+				else
+					terrainCell.view.Hide();
 			}
 
 			Debug.Log($"maxDensity='{maxDensity}'");

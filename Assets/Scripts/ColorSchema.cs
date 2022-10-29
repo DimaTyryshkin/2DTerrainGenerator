@@ -8,10 +8,11 @@ namespace Terraria
         [SerializeField] Color minDensityColor;
         [SerializeField] Color maxDensityColor;
         public Color grassColor;
-        
-        public Color ColorFromDensity(float density)
+
+        public Color ColorFromDensity(float density, float minDensity, float maxDensity)
         {
-            return Color.Lerp(minDensityColor, maxDensityColor, density);
+            float k = (density - minDensity) / (maxDensity - minDensity);
+            return Color.Lerp(minDensityColor, maxDensityColor, k);
         }
     }
 }
