@@ -1,9 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Terraria
+namespace Terraria.NoiseGeneration
 {
-    [CreateAssetMenu(fileName = "NoiseSummator")]
     public sealed class NoiseSummator : NoiseGeneratorAbstract
     {
         public enum Operation

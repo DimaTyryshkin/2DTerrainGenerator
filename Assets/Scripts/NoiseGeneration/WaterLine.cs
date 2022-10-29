@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 
-namespace Terraria
+namespace Terraria.NoiseGeneration
 {
-    [CreateAssetMenu(fileName = "NoiseGenerator")]
     public sealed class WaterLine : NoiseGeneratorAbstract
     {
         [SerializeField] private NoiseGeneratorAbstract noiseGenerator;

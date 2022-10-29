@@ -1,9 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Terraria
+namespace Terraria.NoiseGeneration
 {
-    [CreateAssetMenu(fileName = "NoiseGenerator")]
     public sealed class NoiseGenerator : NoiseGeneratorAbstract
     {
         [SerializeField] private int seed = 1; 
@@ -11,7 +10,11 @@ namespace Terraria
         [SerializeField] private float min = 0; 
         [SerializeField] private float max = 1; 
 
-        private Vector2 offset;
+        Vector2 offset;
+
+        public float Min => min;
+        public float Max => max;
+
 
         public override float GetPoint(float x, float y)
         {

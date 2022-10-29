@@ -2,7 +2,9 @@
 using System.Diagnostics; 
 using NaughtyAttributes;
 using UnityEngine;
-using Debug = UnityEngine.Debug; 
+using Debug = UnityEngine.Debug;
+
+using Terraria.NoiseGeneration;
 
 namespace Terraria
 {

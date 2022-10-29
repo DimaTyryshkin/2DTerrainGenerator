@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Terraria
+namespace Terraria.NoiseGeneration
 {
     public abstract class NoiseGeneratorAbstract : ScriptableObject
     {

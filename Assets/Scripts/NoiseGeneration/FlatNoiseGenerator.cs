@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 
-namespace Terraria
+namespace Terraria.NoiseGeneration
 {
-	[CreateAssetMenu(fileName = "FlatNoiseGenerator")]
 	public sealed class FlatNoiseGenerator : NoiseGeneratorAbstract
 	{  
 		public override float GetPoint(float x, float y)
