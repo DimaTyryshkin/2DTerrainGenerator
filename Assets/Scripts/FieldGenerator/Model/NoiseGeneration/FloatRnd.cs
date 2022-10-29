@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Terraria
+namespace FieldGenerator.Terraria.NoiseGeneration
 {
     public sealed class FloatRnd
     {

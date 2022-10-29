@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: WaterLine-SmallNoise
   m_EditorClassIdentifier: 
   noiseGenerator: {fileID: 11400000, guid: b15dfb2a07a080249866e427748600db, type: 2}
-  terrain: {fileID: 11400000, guid: 8da5a57f59087b549bf5f8b5d4003e1f, type: 2}
+  noiseField: {fileID: 11400000, guid: 8da5a57f59087b549bf5f8b5d4003e1f, type: 2}

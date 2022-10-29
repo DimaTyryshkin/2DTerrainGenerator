@@ -1,11 +1,8 @@
-﻿using System.Diagnostics.Contracts;
-using UnityEngine;
-using UnityEngine.Serialization;
+﻿using UnityEngine;
 
-namespace Terraria
+namespace FieldGenerator.Terraria.NoiseGeneration
 {
-	[CreateAssetMenu(fileName = "Terrain")]
-	public class Terrain : ScriptableObject
+	public class NoiseField : ScriptableObject
 	{
 		[SerializeField] private int height;
 		[SerializeField] private int width;

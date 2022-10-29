@@ -1,0 +1,16 @@
+{
+    "name": "FieldGenerator.NoiseGenerator.Model",
+    "rootNamespace": "",
+    "references": [
+        "GUID:8796e31d6ebfd0b41ba06ef21202575e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

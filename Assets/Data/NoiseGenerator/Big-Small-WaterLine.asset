@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Big-Small-WaterLine
   m_EditorClassIdentifier: 
   noiseGenerator: {fileID: 11400000, guid: c4cbe80144c558842bcb9f6af88eab8a, type: 2}
-  terrain: {fileID: 11400000, guid: 8da5a57f59087b549bf5f8b5d4003e1f, type: 2}
+  noiseField: {fileID: 11400000, guid: 8da5a57f59087b549bf5f8b5d4003e1f, type: 2}

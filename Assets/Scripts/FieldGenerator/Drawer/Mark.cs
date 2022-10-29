@@ -1,7 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 
-namespace Terraria
+namespace FieldGenerator
 {
 	public class Mark : MonoBehaviour
 	{

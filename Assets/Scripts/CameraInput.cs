@@ -1,4 +1,5 @@
-﻿using SiberianWellness.Common;
+﻿using FieldGenerator;
+using SiberianWellness.Common;
 using UnityEngine;
 
 namespace Terraria

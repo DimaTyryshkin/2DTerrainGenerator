@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Terraria
+namespace FieldGenerator
 {
     public class Square : MonoBehaviour
     {

@@ -1,4 +1,4 @@
-﻿namespace Terraria
+﻿namespace FieldGenerator
 {
 	public struct Cell
 	{

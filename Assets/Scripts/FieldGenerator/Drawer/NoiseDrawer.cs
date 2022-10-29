@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics; 
-using NaughtyAttributes;
-using SiberianWellness.Common;
-using SiberianWellness.NotNullValidation;
+using System.Diagnostics;
+using FieldGenerator;
 using UnityEngine;
+using UnityEngine.Assertions;
 using Debug = UnityEngine.Debug;
 
-using Terraria.NoiseGeneration;
-using UnityEngine.Assertions;
-using UnityEngine.UIElements;
+using NaughtyAttributes;
+using SiberianWellness.NotNullValidation;
+using SiberianWellness.Common;
+using FieldGenerator.Terraria.NoiseGeneration;
+using TerrainData = FieldGenerator.TerrainData;
 
-namespace Terraria
+namespace FieldGenerator
 {
 	class ViewCell : GridCell
 	{
@@ -39,8 +40,8 @@ namespace Terraria
 		Grid<ViewCell> viewGrid;
 
 		public TerrainData TerrainData => terrainData;
-		public Terrain Terrain => settings.terrain;
-		public Vector2 Size =>  new Vector3(settings.terrain.Width, settings.terrain.Height);
+		public NoiseField NoiseField=> settings.noiseField;
+		public Vector2 Size =>  new Vector3(settings.noiseField.Width, settings.noiseField.Height);
 		public Vector2 Center => (Vector2)transform.position + Size * 0.5f;
 		
 
@@ -57,7 +58,7 @@ namespace Terraria
 			Stopwatch watch = new Stopwatch();
 			
 			watch.Start();
-			viewFieldRect = new Rect(transform.position, new Vector2(settings.terrain.Width, settings.terrain.Height));
+			viewFieldRect = new Rect(transform.position, new Vector2(settings.noiseField.Width, settings.noiseField.Height));
 			
 			GenerateDensityField();
 			FindGras();
@@ -146,7 +147,7 @@ namespace Terraria
 			float offset = 0.5f;
 			this.offset = new Vector3(offset, offset, 0);
 
-			terrainData = new TerrainData(settings.terrain, noiseGenerator);
+			terrainData = new TerrainData(settings.noiseField, noiseGenerator);
 			terrainData.GenerateDensityField();
 			viewGrid = new Grid<ViewCell>(terrainData.width, terrainData.height);
 			squaresRoot = CreateRoot(squaresRoot, "root");
@@ -184,7 +185,7 @@ namespace Terraria
 #if UNITY_EDITOR
 		void OnDrawGizmos()
 		{
-			if (settings.terrain)
+			if (settings.noiseField)
 				Gizmos.DrawWireCube(Center, Size);
 		}
 #endif

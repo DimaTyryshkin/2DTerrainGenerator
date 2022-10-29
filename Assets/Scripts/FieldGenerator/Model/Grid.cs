@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Terraria
+namespace FieldGenerator
 {
 	public class GridCell
 	{

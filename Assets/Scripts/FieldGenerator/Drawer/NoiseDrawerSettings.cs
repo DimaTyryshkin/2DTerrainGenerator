@@ -1,12 +1,13 @@
 ﻿using SiberianWellness.NotNullValidation;
+using FieldGenerator.Terraria.NoiseGeneration;
 using UnityEngine;
 
-namespace Terraria
+namespace FieldGenerator
 {
 	[CreateAssetMenu]
 	public class NoiseDrawerSettings : ScriptableObject
 	{
-		[IsntNull] public Terrain terrain;
+		[IsntNull] public NoiseField noiseField;
 		[IsntNull] public ColorSchema colorSchema;
 		[IsntNull] public Square squarePrefab;
 		

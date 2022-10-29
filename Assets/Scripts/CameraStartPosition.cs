@@ -1,4 +1,5 @@
 ﻿using System;
+using FieldGenerator;
 using UnityEngine;
 
 namespace Terraria

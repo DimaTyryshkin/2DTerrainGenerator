@@ -1,7 +1,7 @@
 ﻿using SiberianWellness.NotNullValidation;
 using UnityEngine;
 
-namespace Terraria.NoiseGeneration
+namespace FieldGenerator.Terraria.NoiseGeneration
 {
 	[CreateAssetMenu(fileName = "Clip")]
 	public sealed class Clip : NoiseGeneratorAbstract

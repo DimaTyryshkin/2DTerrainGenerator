@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using Terraria.NoiseGeneration;
+using FieldGenerator.Terraria.NoiseGeneration;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Terraria
+namespace FieldGenerator
 {
     public class TerrainCell : GridCell
     {
@@ -17,7 +17,7 @@ namespace Terraria
 
     public class TerrainData : Grid<TerrainCell>
     {
-	    readonly Terrain terrain;
+	    readonly NoiseField noiseField;
 	    readonly NoiseGeneratorAbstract noiseGenerator;
 
 	    public Cell  MinDensityCell { get; private set; }  
@@ -25,20 +25,20 @@ namespace Terraria
 	    public float MinDensity { get; private set; }  
 	    public float MaxDensity { get; private set; }  
 	    
-	    public TerrainData(Terrain terrain, NoiseGeneratorAbstract noiseGenerator) : base(terrain.Width, terrain.Height)
+	    public TerrainData(NoiseField noiseField, NoiseGeneratorAbstract noiseGenerator) : base(noiseField.Width, noiseField.Height)
 	    {
-		    Assert.IsNotNull(terrain);
+		    Assert.IsNotNull(noiseField);
 		    Assert.IsNotNull(noiseGenerator);
 		    
-		    this.terrain = terrain;
+		    this.noiseField = noiseField;
 		    this.noiseGenerator = noiseGenerator;
 	    }
         
         public void GenerateDensityField()
         {
             float offset = 0.5f;
-        	int squaresOnWidth = terrain.Width;
-        	int squaresOnHeight = terrain.Height;
+        	int squaresOnWidth = noiseField.Width;
+        	int squaresOnHeight = noiseField.Height;
 
         	Cell minDensityCell = new Cell(0, 0);
         	Cell maxDensityCell = minDensityCell;
@@ -48,7 +48,7 @@ namespace Terraria
         	{
         		for (int y = 0; y < squaresOnHeight; y++)
         		{
-                    Vector2 noisePoint = terrain.TerrainPointToNoisePoint(x + offset, y + offset);
+                    Vector2 noisePoint = noiseField.TerrainPointToNoisePoint(x + offset, y + offset);
         			float density = noiseGenerator.GetPoint(noisePoint.x, noisePoint.y);
 
         			Cell cell = new Cell(x, y);

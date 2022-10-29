@@ -1,0 +1,17 @@
+{
+    "name": "FieldGenerator.Model",
+    "rootNamespace": "",
+    "references": [
+        "GUID:8796e31d6ebfd0b41ba06ef21202575e",
+        "GUID:b8b131652d7b45249b0486ff7eb4d913"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
