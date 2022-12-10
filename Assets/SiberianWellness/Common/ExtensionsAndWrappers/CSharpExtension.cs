@@ -1,6 +1,9 @@
 ﻿using System; 
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using UnityEngine;
+using Random = System.Random;
 
 namespace SiberianWellness.Common
 {
@@ -50,6 +53,19 @@ namespace SiberianWellness.Common
 		}
 	}
 	
+	public static class StringBuilderExtension
+	{
+		public static void AppendLine<T>(this StringBuilder stringBuilder, T value)
+		{
+			stringBuilder.AppendLine(value.ToString());
+		}
+		
+		public static void Log(this StringBuilder stringBuilder)
+		{
+			Debug.Log(stringBuilder.ToString());
+		}
+	}
+
 	public static class StringExtension
 	{
 		public static string TrimEnd(this string origin, int count)
@@ -67,8 +83,7 @@ namespace SiberianWellness.Common
 			
 			return false;
 		}
-		 
-		
+		 		
 		public static int FindSubstringIndex(this string origin, string subString)
 		{
 			for (int i = 0; i < origin.Length; i++)

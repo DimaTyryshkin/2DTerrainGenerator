@@ -29,8 +29,7 @@ namespace SiberianWellness.DebugTools
 			Application.logMessageReceived += OnLogMessageReceived;
 		}
 
-		[Conditional("QA")]
-		[Conditional("DEV")]
+		[Conditional("QA"), Conditional("DEV")]
 		public static void Log(string condition, string stacktrace)
 		{
 			inst?.LogInternal(condition, stacktrace);

@@ -21,8 +21,7 @@ namespace SiberianWellness
 
     public class ObjectPool : MonoBehaviour
     {
-        [SerializeField,  IsntNull]
-        GameObject prefab;
+        [SerializeField, IsntNull]  GameObject prefab;
         
         [SerializeField]
         int initialSize;

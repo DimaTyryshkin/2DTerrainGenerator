@@ -47,12 +47,10 @@ namespace SiberianWellness.InputSystem
 			TwoTouch,
 			MultiTouch,
 		}
- 
-		[SerializeField, IsntNull]
-		GuiHit guiHit;
-		
-		[SerializeField, IsntNull] 
-		GameObject pointerImage;
+
+		[SerializeField, IsntNull]  GuiHit guiHit;
+
+		[SerializeField, IsntNull]  GameObject pointerImage;
 
 		[SerializeField] 
 		bool showClick;

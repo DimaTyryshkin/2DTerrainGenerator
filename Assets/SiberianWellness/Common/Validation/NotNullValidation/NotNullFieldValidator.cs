@@ -51,7 +51,7 @@ namespace SiberianWellness.NotNullValidation.Internal
                             return;
                     }
 
-                    ValidationProblem.Type type = attribute.warring ?
+                    ValidationProblem.Type type = attribute.Warring ?
                         ValidationProblem.Type.Warning :
                         ValidationProblem.Type.Error;
 

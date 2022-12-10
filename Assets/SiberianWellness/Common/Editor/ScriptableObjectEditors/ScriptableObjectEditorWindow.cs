@@ -7,7 +7,7 @@ namespace SiberianWellness.ScriptableObjectEditors.Editor
 	/// <summary>
 	/// Короче идея такая:
 	/// Все кастомные редакторы которые рисуются в отдельных окошках содержат кучу одинакового кода связанного с работой самого окна. Этот код вынесен сюда.
-	/// А вся уникальная логика (которая кстати теперь вообще не зависит от окна) вынесена в класс редактор <see cref="ScriptableObjectEditor{TAsset}"/>
+	/// А вся уникальная логика (которая кстати теперь вообще не зависит от окна) вынесена в класс редактор <see cref="ScriptableObjectEditor{EditorT}"/>
 	/// </summary>
 	/// <typeparam name="AssetT">Тип ассета, который дерактируется в редакторе</typeparam>
 	/// <typeparam name="EditorT">Тип редактора</typeparam>

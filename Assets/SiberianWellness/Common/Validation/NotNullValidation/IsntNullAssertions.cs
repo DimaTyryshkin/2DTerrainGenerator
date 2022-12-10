@@ -4,9 +4,10 @@ using SiberianWellness.Validation;
 using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
+
 namespace SiberianWellness.NotNullValidation
 {
-	public class IsntNull
+	public class IsntNullAssertions
 	{ 
 		public static TimeSpan totalTime = new TimeSpan();
 
