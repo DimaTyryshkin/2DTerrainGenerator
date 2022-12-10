@@ -7,10 +7,11 @@ namespace FieldGenerator.Terraria.NoiseGeneration
 		[SerializeField] private int height;
 		[SerializeField] private int width;
 
-		[Space] 
-		[SerializeField] private int groundOffset = 0;
+		[Space, SerializeField] 
+		
+		private int groundOffset = 0;
 		[SerializeField] private float globalScale = 1;
-		[SerializeField] [Range(0, 0.1f)] private float heightScale = 0.1f;
+		[SerializeField, Range(0, 0.1f)]  private float heightScale = 0.1f;
 
 		public int Height => height;
 		public int Width => width;

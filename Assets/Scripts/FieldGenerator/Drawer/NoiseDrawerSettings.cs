@@ -10,8 +10,9 @@ namespace FieldGenerator
 		[IsntNull] public NoiseField noiseField;
 		[IsntNull] public ColorSchema colorSchema;
 		[IsntNull] public Square squarePrefab;
+
+		[Space, IsntNull] 
 		
-		[Space] 
-		[IsntNull] public GameObject marker;
+		public GameObject marker;
 	}
 }

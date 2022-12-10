@@ -25,12 +25,11 @@ namespace FieldGenerator
 	}
 
 	public class NoiseDrawer : MonoBehaviour
-	{  
-		[SerializeField, IsntNull] NoiseGeneratorAbstract noiseGenerator;  
-		[SerializeField, IsntNull] bool markVoids;
-		
-		[Space]
-		[SerializeField, IsntNull] NoiseDrawerSettings settings;
+	{
+		[SerializeField, IsntNull]  NoiseGeneratorAbstract noiseGenerator;
+		[SerializeField, IsntNull]  bool markVoids;
+
+		[Space, SerializeField, IsntNull]   NoiseDrawerSettings settings;
 
 		Transform squaresRoot;
 		Transform markersRoot;

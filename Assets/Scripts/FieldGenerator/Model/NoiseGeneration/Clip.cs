@@ -6,8 +6,8 @@ namespace FieldGenerator.Terraria.NoiseGeneration
 	[CreateAssetMenu(fileName = "Clip")]
 	public sealed class Clip : NoiseGeneratorAbstract
 	{
-		[SerializeField,IsntNull] NoiseGeneratorAbstract noise;
-		[SerializeField,IsntNull] NoiseGeneratorAbstract clipNoise;
+		[SerializeField, IsntNull]  NoiseGeneratorAbstract noise;
+		[SerializeField, IsntNull]  NoiseGeneratorAbstract clipNoise;
         
 		public override float GetPoint(float x, float y)
 		{
