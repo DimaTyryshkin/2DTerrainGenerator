@@ -1,0 +1,20 @@
+{
+    "name": "Terraria",
+    "rootNamespace": "",
+    "references": [
+        "GUID:ab8efc754134495419ddebe24173b53c",
+        "GUID:8796e31d6ebfd0b41ba06ef21202575e",
+        "GUID:e019b9b2c29e32a4c86aed1e2213f4f9",
+        "GUID:9d1aedfe747e5de4a94413f26a7047c3",
+        "GUID:b8b131652d7b45249b0486ff7eb4d913"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

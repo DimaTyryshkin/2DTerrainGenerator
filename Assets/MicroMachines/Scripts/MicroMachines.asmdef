@@ -1,0 +1,18 @@
+{
+    "name": "MicroMachines",
+    "rootNamespace": "",
+    "references": [
+        "GUID:8796e31d6ebfd0b41ba06ef21202575e",
+        "GUID:ab8efc754134495419ddebe24173b53c",
+        "GUID:776d03a35f1b52c4a9aed9f56d7b4229"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
