@@ -106,13 +106,13 @@ namespace SiberianWellness.Common
             return childGo;
         }
 
-        public static void DestroyChilds(this Transform transform)
+        public static void DestroyChildren(this Transform transform)
         {
-            int n = 100000;
+            int n = transform.childCount;
             while (transform.childCount > 0)
             {
                 n--;
-                if (n == 0)
+                if (n < 0)
                 {
                     Debug.LogError("Infinity loop");
                     break;

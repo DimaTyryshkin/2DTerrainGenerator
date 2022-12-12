@@ -34,21 +34,21 @@ namespace MicroMachines
 		[SerializeField, IsntNull] WheelCollider leftForward;
 		[SerializeField, IsntNull] WheelCollider leftBack;
 		[SerializeField, IsntNull] WheelCollider[] wheelColliders;
-
-
-		//public float Speed => thisRigidbody.velocity.magnitude;
-		public float ForwardSpeed { get; private set; }
-		public Vector3 Velocity { get; private set; }
-		public float WheelAngle => lastWheelAngle;
-		public float MaxSpeed => carEngineParams.maxSpeedKmPerHour * KmToM;
-		public float WheelRadius => leftForward.radius;
-		
+ 
 		public const float MToKm = 3.6f; 
 		public const float KmToM = 1f/MToKm; 
 
 		Vector2 lastInput;
 		float lastWheelAngle;
 		float distanceBetweenAxle;
+		
+		public float ForwardSpeed { get; private set; }
+		public float TangentSpeed { get; private set; }
+		public bool IsBake  { get; private set; }
+		public Vector3 Velocity { get; private set; }
+		public float WheelAngle => lastWheelAngle;
+		public float MaxSpeed => carEngineParams.maxSpeedKmPerHour * KmToM;
+		public float WheelRadius => leftForward.radius;
 
 		void Start()
 		{
@@ -79,12 +79,14 @@ namespace MicroMachines
 			Vector3 forwardVelocity = Vector3.Project(velocity, forward);
 			Vector3 tangentVelocity = velocity - forwardVelocity;
 
-			// True, если скорость машины и ввод игрока совпадают по направлению. Тоесть игрок хочет нарастить скорость.
-			bool isSpeedAndInputInOneWay = (forwardSpeed * input.x) > 0;
+			TangentSpeed = tangentVelocity.magnitude;
+
+			// True, если скорость машины и ввод игрока не совпадают по направлению. Тоесть игрок хочет тормозить
+			IsBake = (forwardSpeed * input.x) > 0 ;
 
 			bool canApplyForce = false;
 
-			if (isSpeedAndInputInOneWay)
+			if (!IsBake)
 			{
 				if (Mathf.Abs(forwardSpeed) < (carEngineParams.maxSpeedKmPerHour * KmToM))
 					canApplyForce = true; // Разгоянемся
@@ -112,7 +114,7 @@ namespace MicroMachines
 
 
 			// Сила трения движения в бок
-			float tangentFrequency = carEngineParams.tangentVelocityToFrequencyFactor * carEngineParams.tangentVelocityToFrequencyCurve.Evaluate(tangentVelocity.magnitude * MToKm);
+			float tangentFrequency = carEngineParams.tangentVelocityToFrequencyFactor * carEngineParams.tangentVelocityToFrequencyCurve.Evaluate(TangentSpeed * MToKm);
 			thisRigidbody.AddForce(tangentVelocity * (tangentFrequency * Time.fixedDeltaTime), ForceMode.VelocityChange);
 
 			// rotaton 

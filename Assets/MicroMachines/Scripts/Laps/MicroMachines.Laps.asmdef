@@ -1,12 +1,11 @@
 {
-    "name": "MicroMachines",
+    "name": "MicroMachines.Laps",
     "rootNamespace": "",
     "references": [
         "GUID:8796e31d6ebfd0b41ba06ef21202575e",
-        "GUID:ab8efc754134495419ddebe24173b53c",
         "GUID:776d03a35f1b52c4a9aed9f56d7b4229",
         "GUID:3775afe3beade8344a3ec64c0b866928",
-        "GUID:1be4dd162d8114d458928861b99e1e40"
+        "GUID:a5633e4de949e944189823daf17ac229"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

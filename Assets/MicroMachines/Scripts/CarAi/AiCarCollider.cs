@@ -1,10 +1,10 @@
 ﻿using SiberianWellness.NotNullValidation;
 using UnityEngine;
 
-namespace MicroMachines
+namespace MicroMachines.CarAi
 {
 	public class AiCarCollider : MonoBehaviour
 	{
-		[IsntNull] public AiCarInput aiCarInput; 
+		[IsntNull] public NavigationFieldAiCarInput aiCarInput; 
 	}
 }

@@ -6,13 +6,24 @@ namespace MicroMachines
 {
 	public class CarEffects : MonoBehaviour
 	{
+
 		[SerializeField, IsntNull] CarRigidbody carRigidbody;
 		[IsntNull] public WheelView[] wheelsView;
+		
+		[Header("StopLight")]
+		[SerializeField] Material stopLightMaterial;
+		[SerializeField] MeshRenderer meshRenderer;
+		[SerializeField] int materialIndex;
 
 		float lastWheelRotationAngle;
+		Material originalStopLightMaterial;
+		bool stopLightEnable;
 
 		void Start()
 		{
+			originalStopLightMaterial = meshRenderer.sharedMaterials[materialIndex];
+			stopLightEnable = false;
+			
 			foreach (WheelView wheelView in wheelsView)
 			{
 				wheelView.Init();
@@ -22,6 +33,19 @@ namespace MicroMachines
 
 		void Update()
 		{
+			//  
+			var mats = meshRenderer.sharedMaterials;
+			if (carRigidbody.IsBake && carRigidbody.Velocity.magnitude > 1)
+			{
+				mats[materialIndex] = stopLightMaterial;
+			}
+			else
+			{
+				mats[materialIndex] = originalStopLightMaterial;
+			}
+
+			meshRenderer.materials = mats;
+
 			// steer wheels
 			float angle = carRigidbody.WheelAngle;
 			Quaternion steerRotation = Quaternion.Euler(0, angle, 0);

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1472935309853126676}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: pointOfRotationForce
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 7830098725866403020}
   - component: {fileID: 2296349392008334307}
   - component: {fileID: 4758999816792467079}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -129,7 +129,8 @@ GameObject:
   - component: {fileID: 1933618307}
   - component: {fileID: 1561791870}
   - component: {fileID: 1561791871}
-  m_Layer: 0
+  - component: {fileID: 7645317636018073622}
+  m_Layer: 6
   m_Name: car-passenger-race
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -188,6 +189,9 @@ MonoBehaviour:
   - {fileID: 6003482755300926039}
   - {fileID: 914852943838507487}
   - {fileID: 1517203780033335200}
+  stopLightMaterial: {fileID: 2100000, guid: 30c502876adc1ac40a2dcd533b50ec72, type: 2}
+  meshRenderer: {fileID: 8526853129656532961}
+  materialIndex: 5
 --- !u!114 &4995445365304906774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,7 +302,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1294016219913992492}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 52419c8dda914dc492092e9dd68f347e, type: 3}
   m_Name: 
@@ -340,18 +344,26 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1294016219913992492}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4fb5ad0328f945a1afa7ab2e7507e03b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   carRigidbody: {fileID: 4995445365304906774}
-  pointsRoot: {fileID: 0}
+  navigationFieldPipette: {fileID: 6777211800322858332}
+  navigationField: {fileID: 0}
   debugMarker: {fileID: 1113779330339032567}
   stopTimer: 0.3
   speedLimitDuration: 2
   backwardDistance: 5
-  predictionFactor: 0.15
+  predictionFactor: 0.2
+  debug: 0
+  oldAlg: 0
+  bakeSpeed: 0.5
+  randomizeBake: 0
+  bakePredictionFactor: 1
+  mode1: 0
+  t: 0.99
 --- !u!114 &1561791871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -367,6 +379,20 @@ MonoBehaviour:
   carRigidbody: {fileID: 4995445365304906774}
   carEffects: {fileID: 4995445365304906775}
   isRecord: 1
+--- !u!114 &7645317636018073622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1294016219913992492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 265e0800fd2544cd936309eb94f9f94a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  racerName: Player
+  racerColor: {r: 0.19551694, g: 0.3737443, b: 0.90099996, a: 1}
 --- !u!1 &4771548354842329128
 GameObject:
   m_ObjectHideFlags: 0
@@ -376,10 +402,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1099699874641964718}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: thirdPersonCameraTarget
   m_TagString: Untagged
-  m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -406,7 +432,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2527084095305169047}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: debug
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -428,6 +454,36 @@ Transform:
   m_Father: {fileID: 7462078879987258243}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7827494864293316319
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6777211800322858332}
+  m_Layer: 0
+  m_Name: navigationFieldPipette
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6777211800322858332
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7827494864293316319}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.01, y: 0.296, z: 2.94}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8146026717830331440}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8146026716040624637
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,7 +494,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8146026716040624636}
   - component: {fileID: 8146026716040624639}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: trailRenderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -577,7 +633,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8146026716199098170}
   - component: {fileID: 6600142861847404208}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: forwardLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -625,7 +681,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8146026716272677295}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: moveRotation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -657,7 +713,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8146026716314090041}
   - component: {fileID: 914852943838507487}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: backLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -705,7 +761,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8146026716338438310}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: weels
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -740,7 +796,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8146026716354006938}
   - component: {fileID: 8146026716354006933}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: trailRenderer (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -879,7 +935,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8146026716493620430}
   - component: {fileID: 8146026716493620425}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -923,7 +979,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8146026716504223136}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: trailPoint (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -953,7 +1009,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8146026716521483564}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: cameraTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -984,7 +1040,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8146026716743089197}
   - component: {fileID: 8146026716743089196}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: trailRenderer (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1122,7 +1178,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8146026716949719337}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: moveRotation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1154,7 +1210,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8146026717007030419}
   - component: {fileID: 8146026717007030418}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: forwardLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1215,7 +1271,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8146026717051374596}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: wheelsView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1247,7 +1303,7 @@ GameObject:
   - component: {fileID: 8146026717061120674}
   - component: {fileID: 8146026717061120669}
   - component: {fileID: 1277549073}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1303,7 +1359,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8146026717116067808}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: moveRotation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1335,7 +1391,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8146026717117588664}
   - component: {fileID: 8146026717117588667}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: forwardRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1396,7 +1452,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8146026717138015404}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: trailPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1426,7 +1482,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8146026717184774820}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: trailPoint (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1456,7 +1512,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8146026717302015413}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: centerOfMass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1487,7 +1543,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8146026717332185824}
   - component: {fileID: 8146026717332185827}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: backLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1549,7 +1605,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8146026717535155032}
   - component: {fileID: 1517203780033335200}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: backRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1597,7 +1653,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8146026717602985211}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1631,7 +1687,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8146026717728107600}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: trailPoint (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1661,7 +1717,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8146026717830331440}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: points
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1683,6 +1739,7 @@ Transform:
   - {fileID: 8146026716521483564}
   - {fileID: 1472935309853126676}
   - {fileID: 1099699874641964718}
+  - {fileID: 6777211800322858332}
   m_Father: {fileID: 7462078879987258243}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1696,7 +1753,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8146026717900942843}
   - component: {fileID: 8146026717900942842}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: backRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1758,7 +1815,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8146026717954084610}
   - component: {fileID: 8146026717954084861}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: capsule (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1802,7 +1859,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8146026717999019757}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: moveRotation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1834,7 +1891,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8146026718092423407}
   - component: {fileID: 8146026718092423406}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: trailRenderer (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1973,7 +2030,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8146026718093907710}
   - component: {fileID: 6003482755300926039}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: forwardRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2023,7 +2080,7 @@ GameObject:
   - component: {fileID: 8526853129658956193}
   - component: {fileID: 8526853129655531937}
   - component: {fileID: 8526853129656532961}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: car-passenger-race-base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2072,12 +2129,12 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 48b31daa83ddb854fadd9402702394e4, type: 2}
+  - {fileID: 2100000, guid: b064f99cf70b44e47a02b3c08c5bafb5, type: 2}
   - {fileID: 2100000, guid: ffce2a7e1519d465684f3f97da456fa9, type: 2}
   - {fileID: 2100000, guid: c48ed0c67054fc24da0ac1cced5a308c, type: 2}
   - {fileID: 2100000, guid: 11a8c080607cf47c299aff53087e0334, type: 2}
-  - {fileID: 2100000, guid: 4b6c16c8bf29c9e40bc66796d0674b6e, type: 2}
-  - {fileID: 2100000, guid: 1d41f8c57e738e44f9f12fc053be388c, type: 2}
+  - {fileID: 2100000, guid: 4ea8e2de4ac6b564c98a36f67a2ad64f, type: 2}
+  - {fileID: 2100000, guid: af6a02f03aa718744a9fe19893fcb9e8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2108,7 +2165,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8526853129658956197}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: car-passenger-race
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2146,7 +2203,7 @@ GameObject:
   - component: {fileID: 8526853129658956201}
   - component: {fileID: 8526853129655531945}
   - component: {fileID: 8526853129656532969}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: car-passenger-race-wheel_FL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2230,7 +2287,7 @@ GameObject:
   - component: {fileID: 8526853129658956203}
   - component: {fileID: 8526853129655531947}
   - component: {fileID: 8526853129656532971}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: car-passenger-race-wheel_BR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2314,7 +2371,7 @@ GameObject:
   - component: {fileID: 8526853129658956205}
   - component: {fileID: 8526853129655531949}
   - component: {fileID: 8526853129656532973}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: car-passenger-race-wheel_BL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2398,7 +2455,7 @@ GameObject:
   - component: {fileID: 8526853129658956215}
   - component: {fileID: 8526853129655531959}
   - component: {fileID: 8526853129656532983}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: car-passenger-race-wheel_FR
   m_TagString: Untagged
   m_Icon: {fileID: 0}

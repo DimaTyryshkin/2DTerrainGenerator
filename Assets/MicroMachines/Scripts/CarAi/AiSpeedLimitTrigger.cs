@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace MicroMachines
+namespace MicroMachines.CarAi
 {
 	public class AiSpeedLimitTrigger : MonoBehaviour
 	{
