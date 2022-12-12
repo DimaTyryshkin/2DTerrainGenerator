@@ -51,10 +51,10 @@ namespace MicroMachines.Lap
 					var aiCarInput = racer.racer.GetComponent<NavigationFieldAiCarInput>();
 
 					if (carInput)
-						carInput.enabled = false;	
-					
+						carInput.DisableEngine = true;
+
 					if (aiCarInput)
-						aiCarInput.enabled = false;
+						aiCarInput.IsRun = false;
 				}
 			}
 		}
@@ -79,7 +79,7 @@ namespace MicroMachines.Lap
 			if (status == null)
 				status = lapCounter.SortedRacersStatus[0];
 
-			lapRacingStatusPanel.DrawPlayer(status.completeLaps + 1, lapCount);
+			lapRacingStatusPanel.DrawLaps(Mathf.Min(status.completeLaps + 1, lapCount), lapCount);
 		}
 	}
 }

@@ -43,6 +43,7 @@ namespace MicroMachines
 		float distanceBetweenAxle;
 		
 		public float ForwardSpeed { get; private set; }
+		public float Speed { get; private set; }
 		public float TangentSpeed { get; private set; }
 		public bool IsBake  { get; private set; }
 		public Vector3 Velocity { get; private set; }
@@ -63,8 +64,6 @@ namespace MicroMachines
 			
 			if(wheelColliders.Any(x=>x.isGrounded))
 				SpeedFixedUpdate2(lastInput);
-			
-			lastInput = Vector2.zero;
 		}
 
 		void SpeedFixedUpdate2(Vector2 input)
@@ -72,21 +71,22 @@ namespace MicroMachines
 			input.x *= carEngineParams.forwardInputScale;
 			Vector3 forward = thisRigidbody.transform.forward.normalized;
 			Vector3 velocity = thisRigidbody.velocity;
-			Velocity = velocity;
 			// Если больше нуля, значит машина едет вперед.
 			float forwardSpeed = Vector3.Dot(velocity, forward);
-			ForwardSpeed = forwardSpeed;
 			Vector3 forwardVelocity = Vector3.Project(velocity, forward);
 			Vector3 tangentVelocity = velocity - forwardVelocity;
 
+			Velocity = velocity;
+			ForwardSpeed = forwardSpeed;
+			Speed = Velocity.magnitude;
 			TangentSpeed = tangentVelocity.magnitude;
 
-			// True, если скорость машины и ввод игрока не совпадают по направлению. Тоесть игрок хочет тормозить
-			IsBake = (forwardSpeed * input.x) > 0 ;
+			// True, если скорость машины и ввод игрока совпадают по направлению. Тоесть игрок хочет разгоняться
+			bool isAccelerating = (forwardSpeed * input.x) > 0 ;
 
 			bool canApplyForce = false;
 
-			if (!IsBake)
+			if (isAccelerating)
 			{
 				if (Mathf.Abs(forwardSpeed) < (carEngineParams.maxSpeedKmPerHour * KmToM))
 					canApplyForce = true; // Разгоянемся
@@ -186,6 +186,12 @@ namespace MicroMachines
 		/// </summary>
 		public void Input(Vector2 input)
 		{
+			IsBake = false;
+
+			if ((input.x < lastInput.x || input.x<=0) 
+			    && ForwardSpeed > 1) 
+				IsBake = true;
+			
 			lastInput = input;
 		}
 

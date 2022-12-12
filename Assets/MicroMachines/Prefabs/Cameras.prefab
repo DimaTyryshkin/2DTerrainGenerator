@@ -122,7 +122,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1660192326733699207}
   m_LocalRotation: {x: 0.056479745, y: 0.7048476, z: -0.056479763, w: 0.7048476}
-  m_LocalPosition: {x: -6.67, y: 3.42, z: -63.32}
+  m_LocalPosition: {x: -6.71, y: 3.15, z: -64.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1660192327218634199}
@@ -258,6 +258,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   followCamera: {fileID: 1660192327965046090}
+  mainCanvas: {fileID: 0}
   thirdPersonFollowCamera: {fileID: 1660192328395273757}
   speedometerPresenter: {fileID: 0}
   targetIndex: 0
@@ -268,6 +269,7 @@ MonoBehaviour:
   - {fileID: 1660192328621810987}
   - {fileID: 1660192328395273758}
   - {fileID: 1660192326733699207}
+  speedometerPanel: {fileID: 0}
 --- !u!1 &1660192327965046095
 GameObject:
   m_ObjectHideFlags: 0
@@ -357,8 +359,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offsetMarker: {fileID: 1660192327984547982}
+  thisCamera: {fileID: 1660192327965046093}
   viewCenterMarker: {fileID: 1660192326699702843}
-  k: 8
+  speedToScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0.008340881
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 119.8914
+      value: 1
+      inSlope: 0.008340881
+      outSlope: 0.026956538
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.028959211
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  scaleFactor: 0.3
+  moveFactor: 0.4
+  speedLerpFactor: 1
+  mainMoveLerpFactor: 8
 --- !u!1 &1660192327984547983
 GameObject:
   m_ObjectHideFlags: 0
@@ -467,13 +497,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1660192328395273758}
-  m_LocalRotation: {x: 0.20565167, y: -0, z: -0, w: 0.9786253}
-  m_LocalPosition: {x: 0, y: 5.53, z: -8.43}
+  m_LocalRotation: {x: 0, y: 0.9914449, z: -0.13052616, w: 0}
+  m_LocalPosition: {x: 0, y: 1.52, z: 7.63}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1660192327218634199}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 23.735, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 15, y: 180, z: 0}
 --- !u!20 &1660192328395273755
 Camera:
   m_ObjectHideFlags: 0
@@ -538,7 +568,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startOffsetMarker: {fileID: 1660192327984547982}
-  k: 15
+  k: 12
 --- !u!1 &1660192328621810987
 GameObject:
   m_ObjectHideFlags: 0
@@ -554,7 +584,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1660192328621810986
 Transform:
   m_ObjectHideFlags: 0
@@ -562,11 +592,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1660192328621810987}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: 0.96957195, z: -0, w: -0.24480642}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2.7626, y: 2.7626, z: 2.7626002}
   m_Children:
   - {fileID: 1660192326938400246}
   m_Father: {fileID: 1660192327218634199}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 208.341, z: 0}

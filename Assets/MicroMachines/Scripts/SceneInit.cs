@@ -1,4 +1,5 @@
-﻿using NaughtyAttributes;
+﻿using System;
+using NaughtyAttributes;
 using SiberianWellness.NotNullValidation;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -24,6 +25,9 @@ namespace MicroMachines
 		
 		[SerializeField, IsntNull] CarRoot[] targets;
 		[SerializeField, IsntNull] GameObject[] cameras;
+		
+		[Header("Debug")]
+		[SerializeField, IsntNull] SpeedometerPanel speedometerPanel;
 
 
 		void Start()
@@ -36,6 +40,11 @@ namespace MicroMachines
 			SetCamera(cameraIndex);
 		}
 
+		void Update()
+		{
+			speedometerPanel.Draw(followCamera.SpeedFactor *100);
+		}
+
 		public void Restart()
 		{
 			SceneManager.LoadScene(0);
@@ -45,12 +54,8 @@ namespace MicroMachines
 		{
 			CarRoot target = targets[index];
 			speedometerPresenter.SetTarget(target.transform);
-			
-			var simpleCarController = target.GetComponent<SimpleCarController>();
-			if(simpleCarController)
-				speedometerPresenter.SetTarget(simpleCarController);
-			
-			followCamera.SetTarget(target.cameraTarget);
+
+			followCamera.SetTarget(target.cameraTarget, target.transform);
 			thirdPersonFollowCamera.SetTarget(target.thirdPersonCameraTarget);
 
 			for (int i = 0; i < targets.Length; i++)

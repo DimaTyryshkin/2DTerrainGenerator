@@ -14,8 +14,10 @@ namespace MicroMachines
 		[SerializeField] Material stopLightMaterial;
 		[SerializeField] MeshRenderer meshRenderer;
 		[SerializeField] int materialIndex;
+		[SerializeField] float minTimeLight;
 
 		float lastWheelRotationAngle;
+		float timeCanDisableStopLight;
 		Material originalStopLightMaterial;
 		bool stopLightEnable;
 
@@ -37,11 +39,21 @@ namespace MicroMachines
 			var mats = meshRenderer.sharedMaterials;
 			if (carRigidbody.IsBake && carRigidbody.Velocity.magnitude > 1)
 			{
-				mats[materialIndex] = stopLightMaterial;
+				timeCanDisableStopLight = Time.time + minTimeLight;
+				if (!stopLightEnable)
+				{
+					stopLightEnable = true;
+					mats[materialIndex] = stopLightMaterial;
+					
+				}
 			}
 			else
 			{
-				mats[materialIndex] = originalStopLightMaterial;
+				if (stopLightEnable && Time.time >= timeCanDisableStopLight)
+				{
+					stopLightEnable = false;
+					mats[materialIndex] = originalStopLightMaterial;
+				}
 			}
 
 			meshRenderer.materials = mats;

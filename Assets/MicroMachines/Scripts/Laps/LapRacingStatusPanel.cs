@@ -36,7 +36,7 @@ namespace MicroMachines.Lap
 			LayoutWrapper.RefreshLayoutGroups(itemsRoot);
 		}
 
-		public void DrawPlayer(int currentLaps, int maxLaps)
+		public void DrawLaps(int currentLaps, int maxLaps)
 		{
 			this.currentLaps.text = currentLaps.ToString();
 			this.maxLaps.text = maxLaps.ToString();

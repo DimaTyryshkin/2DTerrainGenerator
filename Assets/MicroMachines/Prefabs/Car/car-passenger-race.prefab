@@ -122,12 +122,12 @@ GameObject:
   m_Component:
   - component: {fileID: 7462078879987258243}
   - component: {fileID: 4995445365304906772}
-  - component: {fileID: 4995445365304906775}
-  - component: {fileID: 4995445365304906774}
   - component: {fileID: 4663925505989147449}
+  - component: {fileID: 1561791870}
+  - component: {fileID: 4995445365304906774}
+  - component: {fileID: 4995445365304906775}
   - component: {fileID: 3343843984812991564}
   - component: {fileID: 1933618307}
-  - component: {fileID: 1561791870}
   - component: {fileID: 1561791871}
   - component: {fileID: 7645317636018073622}
   m_Layer: 6
@@ -171,7 +171,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &4995445365304906775
+--- !u!114 &4663925505989147449
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -180,18 +180,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 1294016219913992492}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecbb7aabcf314a1ca0cd25aafacfdcef, type: 3}
+  m_Script: {fileID: 11500000, guid: 52419c8dda914dc492092e9dd68f347e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   carRigidbody: {fileID: 4995445365304906774}
-  wheelsView:
-  - {fileID: 6600142861847404208}
-  - {fileID: 6003482755300926039}
-  - {fileID: 914852943838507487}
-  - {fileID: 1517203780033335200}
-  stopLightMaterial: {fileID: 2100000, guid: 30c502876adc1ac40a2dcd533b50ec72, type: 2}
-  meshRenderer: {fileID: 8526853129656532961}
-  materialIndex: 5
+--- !u!114 &1561791870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1294016219913992492}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fb5ad0328f945a1afa7ab2e7507e03b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carRigidbody: {fileID: 4995445365304906774}
+  navigationFieldPipette: {fileID: 6777211800322858332}
+  navigationField: {fileID: 0}
+  debugMarker: {fileID: 1113779330339032567}
+  stopTimer: 0.3
+  speedLimitDuration: 2
+  backwardDistance: 5
+  predictionFactor: 0.2
+  debug: 0
+  oldAlg: 0
+  bakeSpeed: 0.5
+  randomizeBake: 0
+  bakePredictionFactor: 1
+  mode1: 0
+  t: 0
 --- !u!114 &4995445365304906774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,7 +314,7 @@ MonoBehaviour:
   - {fileID: 8146026717117588667}
   - {fileID: 8146026717332185827}
   - {fileID: 8146026717900942842}
---- !u!114 &4663925505989147449
+--- !u!114 &4995445365304906775
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -304,10 +323,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1294016219913992492}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52419c8dda914dc492092e9dd68f347e, type: 3}
+  m_Script: {fileID: 11500000, guid: ecbb7aabcf314a1ca0cd25aafacfdcef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   carRigidbody: {fileID: 4995445365304906774}
+  wheelsView:
+  - {fileID: 6600142861847404208}
+  - {fileID: 6003482755300926039}
+  - {fileID: 914852943838507487}
+  - {fileID: 1517203780033335200}
+  stopLightMaterial: {fileID: 2100000, guid: 30c502876adc1ac40a2dcd533b50ec72, type: 2}
+  meshRenderer: {fileID: 8526853129656532961}
+  materialIndex: 5
+  minTimeLight: 0.3
 --- !u!114 &3343843984812991564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -337,33 +365,6 @@ MonoBehaviour:
   carRigidbody: {fileID: 4995445365304906774}
   carEffects: {fileID: 4995445365304906775}
   isRecord: 1
---- !u!114 &1561791870
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1294016219913992492}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4fb5ad0328f945a1afa7ab2e7507e03b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  carRigidbody: {fileID: 4995445365304906774}
-  navigationFieldPipette: {fileID: 6777211800322858332}
-  navigationField: {fileID: 0}
-  debugMarker: {fileID: 1113779330339032567}
-  stopTimer: 0.3
-  speedLimitDuration: 2
-  backwardDistance: 5
-  predictionFactor: 0.2
-  debug: 0
-  oldAlg: 0
-  bakeSpeed: 0.5
-  randomizeBake: 0
-  bakePredictionFactor: 1
-  mode1: 0
-  t: 0.99
 --- !u!114 &1561791871
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,9 +8,15 @@ namespace MicroMachines
 	{
 		[SerializeField, IsntNull] CarRigidbody carRigidbody;
 
+		public bool DisableEngine { get; set; }
+
 		void Update()
 		{
 			Vector2 input = new Vector2(Input.GetAxis("Vertical"), Input.GetAxis("Horizontal"));
+
+			if (DisableEngine)
+				input.x = 0;
+			
 			carRigidbody.Input(input);
 		}
 	}
