@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using UnityEditor;
 using UnityEditor.Experimental;
 using UnityEditor.SceneManagement;
@@ -64,6 +65,10 @@ namespace Game.LocationData
 			if (!toolCache)
 			{
 				FastSelectionTool asset = CreateInstance<FastSelectionTool>();
+				DirectoryInfo dir = new DirectoryInfo("Assets/Editor/Resources/DeveloperPersonalSettings");
+					if(!dir.Exists)
+						dir.Create();
+					
 				AssetDatabase.CreateAsset(asset, "Assets/Editor/Resources/DeveloperPersonalSettings/FastSelectionTool.asset");
 				AssetDatabase.SaveAssets();
 

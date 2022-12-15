@@ -11,6 +11,7 @@ namespace MicroMachines.RoadBuilder
 	public class RoadBuilderToolWindow : EditorWindow
 	{
 		RoadBuilderTool tool;
+		Vector2 scrollViewPos;
 
 
 		public void Init(RoadBuilderTool tool)
@@ -40,29 +41,34 @@ namespace MicroMachines.RoadBuilder
 			{
 				GUILayout.BeginVertical("Box", GUILayout.Width(150));
 				{
-					GUILayout.Box("Exist");
-					foreach (RoadSegment segment in tool.SegmentsInRoad.ToArray())
+					scrollViewPos = GUILayout.BeginScrollView(scrollViewPos);
 					{
-						GUILayout.BeginHorizontal();
+						GUILayout.Box("Exist");
+						foreach (RoadSegment segment in tool.SegmentsInRoad.ToArray())
 						{
-							if(segment == tool.SelectedSegment)
-								GUI.color = Color.gray;
-							
-							if (GUILayout.Button(segment.SegmentName))
+							GUILayout.BeginHorizontal();
 							{
-								tool.SelectedSegment = segment;
-								SelectObject( segment.gameObject);
+								if (segment == tool.SelectedSegment)
+									GUI.color = Color.gray;
+
+								if (GUILayout.Button(segment.SegmentName))
+								{
+									tool.SelectedSegment = segment;
+									SelectObject(segment.gameObject);
+								}
+
+								GUI.color = Color.white;
+
+								if (GUILayout.Button("x", GUILayout.Width(30)))
+								{
+									tool.Remove(segment);
+									SelectObject(tool.SelectedSegment.gameObject);
+								}
 							}
-							GUI.color = Color.white;
-							
-							if (GUILayout.Button("x", GUILayout.Width(30)))
-							{
-								tool.Remove(segment);
-								SelectObject( tool.SelectedSegment.gameObject);
-							}
+							GUILayout.EndHorizontal();
 						}
-						GUILayout.EndHorizontal();
 					}
+					GUILayout.EndScrollView();
 					
 					GUILayout.Space(5);
 					if (GUILayout.Button("Rebuild"))

@@ -54,7 +54,7 @@ namespace MicroMachines.Lap
 						carInput.DisableEngine = true;
 
 					if (aiCarInput)
-						aiCarInput.IsRun = false;
+						aiCarInput.InputEnable = false;
 				}
 			}
 		}

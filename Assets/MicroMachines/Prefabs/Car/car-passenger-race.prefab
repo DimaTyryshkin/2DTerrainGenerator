@@ -127,7 +127,6 @@ GameObject:
   - component: {fileID: 4995445365304906774}
   - component: {fileID: 4995445365304906775}
   - component: {fileID: 3343843984812991564}
-  - component: {fileID: 1933618307}
   - component: {fileID: 1561791871}
   - component: {fileID: 7645317636018073622}
   m_Layer: 6
@@ -209,8 +208,9 @@ MonoBehaviour:
   bakeSpeed: 0.5
   randomizeBake: 0
   bakePredictionFactor: 1
-  mode1: 0
+  old: 0
   t: 0
+  inputEnable: 1
 --- !u!114 &4995445365304906774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -350,21 +350,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraTarget: {fileID: 8146026716521483564}
   thirdPersonCameraTarget: {fileID: 1099699874641964718}
---- !u!114 &1933618307
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1294016219913992492}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeda2243bd3247a1a3da4b29dab561e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  carRigidbody: {fileID: 4995445365304906774}
-  carEffects: {fileID: 4995445365304906775}
-  isRecord: 1
 --- !u!114 &1561791871
 MonoBehaviour:
   m_ObjectHideFlags: 0

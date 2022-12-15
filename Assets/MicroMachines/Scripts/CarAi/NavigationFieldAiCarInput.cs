@@ -3,13 +3,11 @@ using System.Collections;
 using System.Linq;
 using SiberianWellness.NotNullValidation;
 using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace MicroMachines.CarAi
 { 
-	public class NavigationFieldAiCarInput : MonoBehaviour
+	public class NavigationFieldAiCarInput : BaseCarInput
 	{
 		[SerializeField, IsntNull] CarRigidbody carRigidbody;
 		[SerializeField, IsntNull] Transform navigationFieldPipette;
@@ -41,36 +39,32 @@ namespace MicroMachines.CarAi
 		bool backwardAfterWall;
 		Vector3 stopPosition;
 		float rndBakeFactor;
+		
+		[SerializeField] bool inputEnable = true;
 
-		public bool IsRun
+		public override bool InputEnable
 		{
-			get => enabled;
+			get => inputEnable;
 			set
 			{
-				enabled = value;
+				inputEnable = value;
 				carRigidbody.Input(Vector2.zero);
+				
+				if (inputEnable)
+				{
+					speedLimit = float.MaxValue;
+					debugVectors = new Vector3[2];
+					debugVectorsRed = new Vector3[2];
+					forwardAxisFactor = 1;
+				}
 			}
-		}
-		
-
-		IEnumerator Start()
-		{
-			speedLimit = 0;
-			yield return new WaitForSeconds(0.3f);
-			Run(); 
-		}
-
-		void Run()
-		{
-			IsRun = true;
-			speedLimit = float.MaxValue;
-			debugVectors = new Vector3[2];
-			debugVectorsRed = new Vector3[2];
-			forwardAxisFactor = 1;
 		}
 
 		void Update()
 		{
+			if(!inputEnable)
+				return;
+			
 			if (!navigationField)
 				return;
 

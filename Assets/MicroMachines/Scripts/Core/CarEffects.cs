@@ -22,9 +22,12 @@ namespace MicroMachines
 		bool stopLightEnable;
 
 		void Start()
-		{
-			originalStopLightMaterial = meshRenderer.sharedMaterials[materialIndex];
-			stopLightEnable = false;
+		{ 
+			if(meshRenderer)
+			{
+				originalStopLightMaterial = meshRenderer.sharedMaterials[materialIndex];
+				stopLightEnable = false;
+			}
 			
 			foreach (WheelView wheelView in wheelsView)
 			{
@@ -36,28 +39,31 @@ namespace MicroMachines
 		void Update()
 		{
 			//  
-			var mats = meshRenderer.sharedMaterials;
-			if (carRigidbody.IsBake && carRigidbody.Velocity.magnitude > 1)
+			if(meshRenderer)
 			{
-				timeCanDisableStopLight = Time.time + minTimeLight;
-				if (!stopLightEnable)
+				var mats = meshRenderer.sharedMaterials;
+				if (carRigidbody.IsBake && carRigidbody.Velocity.magnitude > 1)
 				{
-					stopLightEnable = true;
-					mats[materialIndex] = stopLightMaterial;
-					
+					timeCanDisableStopLight = Time.time + minTimeLight;
+					if (!stopLightEnable)
+					{
+						stopLightEnable = true;
+						mats[materialIndex] = stopLightMaterial;
+
+					}
 				}
-			}
-			else
-			{
-				if (stopLightEnable && Time.time >= timeCanDisableStopLight)
+				else
 				{
-					stopLightEnable = false;
-					mats[materialIndex] = originalStopLightMaterial;
+					if (stopLightEnable && Time.time >= timeCanDisableStopLight)
+					{
+						stopLightEnable = false;
+						mats[materialIndex] = originalStopLightMaterial;
+					}
 				}
+
+				meshRenderer.materials = mats;
 			}
-
-			meshRenderer.materials = mats;
-
+			
 			// steer wheels
 			float angle = carRigidbody.WheelAngle;
 			Quaternion steerRotation = Quaternion.Euler(0, angle, 0);
