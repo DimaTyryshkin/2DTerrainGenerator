@@ -1,137 +1,152 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace FieldGenerator
 {
-	public class GridCell
-	{
-		public readonly Cell cell;
+    public class GridCell
+    {
+        public readonly Vector3Int cell;
 
-		public static implicit operator Cell(GridCell cell) => cell.cell;
- 
-		public GridCell(Cell c)
-		{
-			cell = c;
-		}
-	}
+        public static implicit operator Vector3Int(GridCell cell) => cell.cell;
+
+        public GridCell(Vector3Int c)
+        {
+            cell = c;
+        }
+    }
 
 
 
-	public class Grid<T>
-		where T : GridCell
-	{
-		public readonly int height;
-		public readonly int width;
-		T[] cells;
+    public class Grid<T>
+        where T : GridCell
+    {
+        public readonly int ySize;
+        public readonly int xSize;
+        public readonly int zSize;
+        private readonly int xySize;
 
-		public int CellCount => height * width;
-		
-		public T this[Cell c]
-		{
-			get { return GetCell(c); }
-			set { SetCell(c, value); }
-		}
+        T[] cells;
 
-		public T this[int x, int y]
-		{
-			get { return GetCell(x, y); }
-			set { SetCell(x, y, value); }
-		}
+        public int CellCount => ySize * xSize * zSize;
 
-		public Grid(int width, int height)
-		{
-			this.width = width;
-			this.height = height;
-			cells = new T[width * height];
-		}
+        public T this[Vector3Int c]
+        {
+            get { return GetCell(c); }
+            set { SetCell(c, value); }
+        }
 
-		public int CellToIndex(Cell c)
-		{
-			return c.x + c.y * width;
-		}
+        public Grid(Vector3Int size)
+        {
+            xSize = size.x;
+            ySize = size.y;
+            zSize = size.z;
+            xySize = xSize * ySize;
 
-		public int CellToIndex(int x, int y)
-		{
-			return x + y * width;
-		}
+            cells = new T[CellCount];
+        }
 
-		public bool IsCellExist(Cell cell)
-		{
-			if (cell.x >= 0 &&
-			    cell.y >= 0 &&
-			    cell.x < width &&
-			    cell.y < height)
-			{
-				return true;
-			}
+        public int CellToIndex(Vector3Int c)
+        {
+            return c.x + c.y * xSize + c.z * (xySize);
+        }
 
-			return false;
-		}
+        public int CellToIndex(int x, int y, int z)
+        {
+            return x + y * xSize + z * xySize;
+        }
 
-		public T GetCellIfExist(Cell cell)
-		{
-			if (IsCellExist(cell))
-				return GetCell(cell);
-			
-			return null;
-		}
+        public bool IsCellExist(Vector3Int cell)
+        {
+            if (cell.x >= 0 &&
+                cell.y >= 0 &&
+                cell.z >= 0 &&
+                cell.x < xSize &&
+                cell.y < ySize &&
+                cell.z < zSize)
+            {
+                return true;
+            }
 
-		public T GetCell(Cell cell)
-		{
-			return cells[CellToIndex(cell)];
-		}
+            return false;
+        }
 
-		public T GetCell(int x, int y)
-		{
-			return cells[CellToIndex(x, y)];
-		}
+        public T GetCellIfExist(Vector3Int cell)
+        {
+            if (IsCellExist(cell))
+                return GetCell(cell);
 
-		public void SetCell(Cell c, T value)
-		{
-			cells[CellToIndex(c)] = value;
-		}
+            return null;
+        }
 
-		public void SetCell(int x, int y, T value)
-		{
-			cells[CellToIndex(x, y)] = value;
-		}
-		
-		public IEnumerable<T> AllCells()
-		{
-			for (int x = 0; x < width; x++)
-			{
-				for (int y = 0; y < height; y++)
-				{
-					yield return GetCell(x, y);
-				}
-			}
-		}
-		
-		public List<T> GetNearCells(Cell c)
-		{
-			Cell c1 = new Cell(c.x + 1, c.y + 0);
-			Cell c2 = new Cell(c.x + 0, c.y + 1);
-			Cell c3 = new Cell(c.x - 1, c.y + 0);
-			Cell c4 = new Cell(c.x + 0, c.y - 1);
-			List<T> cells = new List<T>(4);
+        public T GetCell(Vector3Int cell)
+        {
+            return cells[CellToIndex(cell)];
+        }
 
-			if (IsCellExist(c1))
-				cells.Add(GetCell(c1));
+        public T GetCell(int x, int y, int z)
+        {
+            return cells[CellToIndex(x, y, z)];
+        }
 
-			if (IsCellExist(c2))
-				cells.Add(GetCell(c2));
+        public void SetCell(Vector3Int c, T value)
+        {
+            cells[CellToIndex(c)] = value;
+        }
 
-			if (IsCellExist(c3))
-				cells.Add(GetCell(c3));
+        public void SetCell(int x, int y, int z, T value)
+        {
+            cells[CellToIndex(x, y, z)] = value;
+        }
 
-			if (IsCellExist(c4))
-				cells.Add(GetCell(c4));
+        public IEnumerable<Vector3Int> GetAllCells()
+        {
+            //TODO надо сделать кеш
+            for (int x = 0; x < xSize; x++)
+            {
+                for (int y = 0; y < ySize; y++)
+                {
+                    for (int z = 0; z < zSize; z++)
+                        yield return new Vector3Int(x, y, z);
+                }
+            }
+        }
 
-			return cells;
-		}
+        public T[] GetAllObjects() => cells;
 
-		public T GetUpCell(Cell c)
-		{
-			return GetCellIfExist(new Cell(c.x, c.y + 1));
-		} 
-	}
+        public List<T> GetNearCells(Vector3Int c)
+        {
+            Vector3Int c1 = new Vector3Int(c.x + 1, c.y + 0, c.z + 0);
+            Vector3Int c2 = new Vector3Int(c.x + 0, c.y + 1, c.z + 0);
+            Vector3Int c3 = new Vector3Int(c.x - 1, c.y + 0, c.z + 0);
+            Vector3Int c4 = new Vector3Int(c.x + 0, c.y - 1, c.z + 0);
+            Vector3Int c5 = new Vector3Int(c.x + 0, c.y + 0, c.z + 1);
+            Vector3Int c6 = new Vector3Int(c.x + 0, c.y + 0, c.z - 1);
+            List<T> cells = new List<T>(6); //TODO надо НЕ выделять память
+
+            if (IsCellExist(c1))
+                cells.Add(GetCell(c1));
+
+            if (IsCellExist(c2))
+                cells.Add(GetCell(c2));
+
+            if (IsCellExist(c3))
+                cells.Add(GetCell(c3));
+
+            if (IsCellExist(c4))
+                cells.Add(GetCell(c4));
+
+            if (IsCellExist(c5))
+                cells.Add(GetCell(c5));
+
+            if (IsCellExist(c6))
+                cells.Add(GetCell(c6));
+
+            return cells;
+        }
+
+        public T GetUpCell(Vector3Int c)
+        {
+            return GetCellIfExist(new Vector3Int(c.x, c.y + 1, c.z));
+        }
+    }
 }

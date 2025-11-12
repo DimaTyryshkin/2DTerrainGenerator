@@ -1,5 +1,4 @@
-﻿using FieldGenerator;
-using UnityEngine; 
+﻿using UnityEngine;
 
 namespace Terraria
 {
@@ -12,18 +11,18 @@ namespace Terraria
         // 0.8 - random
         // 0.5 - min
         // 0.01 - max. Gradient
-        [SerializeField] private float perlinScale1 =1;
-        [SerializeField] private float perlinScale2 =1;
+        [SerializeField] private float perlinScale1 = 1;
+        [SerializeField] private float perlinScale2 = 1;
         [SerializeField] private float heightScale = 0.1f;
         [SerializeField] private int height = 10;
         [SerializeField] private int width = 20;
-        
+
         private Transform terrain;
         private Vector2 offset1;
         private Vector2 offset2;
 
-        
-        
+
+
 
         [ContextMenu("Generate")]
         private void Start()
@@ -48,13 +47,13 @@ namespace Terraria
                     //Debug.Log($"[d] noise = '{noiseValue}'");
 
                     int squareHeightUnderWater = y - height / 2;
-                    float dencity = (noiseValue1+noiseValue2)*0.5f - squareHeightUnderWater * heightScale;
+                    float dencity = (noiseValue1 + noiseValue2) * 0.5f - squareHeightUnderWater * heightScale;
 
 
                     if (dencity > 0)
                     {
                         GameObject newSquare = Instantiate(squarePrefab.gameObject, new Vector3(x, y, 0), Quaternion.identity, terrain);
-                        newSquare.GetComponent<Square>().SetColor(ColorFromNoise(dencity));
+                        //newSquare.GetComponent<Square>().SetColor(ColorFromNoise(dencity));
                     }
 
                 }
@@ -68,10 +67,10 @@ namespace Terraria
         {
             return new Color(noiseValue, noiseValue, noiseValue);
         }
-        
+
         Vector2 GenerateOffset()
         {
-           return new Vector2(Random.Range(0f, 10000f), Random.Range(0f, 10000f));
+            return new Vector2(Random.Range(0f, 10000f), Random.Range(0f, 10000f));
         }
     }
 }

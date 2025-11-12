@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3662d637c0f40e2b5b43650263b30c9, type: 3}
+  m_Name: BlockCollection
+  m_EditorClassIdentifier: 
+  blocks:
+  - name: 2
+    prefab: {fileID: 64192634830717988, guid: ed0e89ba531b1a74cb64f030fd9b02c9, type: 3}
+    density: 0
+  - name: 3
+    prefab: {fileID: 3335016545192322002, guid: 7bb796284a3d19240ad9027c32c22810, type: 3}
+    density: 0
+  - name: 4
+    prefab: {fileID: 1034280290834878401, guid: e17f05717ee433e4bbf6f38978d4e3e2, type: 3}
+    density: 0

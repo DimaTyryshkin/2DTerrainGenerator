@@ -1,0 +1,3 @@
+[submodule "Assets/GamePackages"]
+	path = Assets/GamePackages
+	url = https://github.com/DimaTyryshkin/GamePackages.git

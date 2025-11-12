@@ -1,20 +1,20 @@
-﻿using SiberianWellness.NotNullValidation;
+﻿using GamePackages.Core.Validation;
 using UnityEngine;
 
 namespace FieldGenerator.Terraria.NoiseGeneration
 {
-	[CreateAssetMenu(fileName = "Clip")]
-	public sealed class Clip : NoiseGeneratorAbstract
-	{
-		[SerializeField, IsntNull]  NoiseGeneratorAbstract noise;
-		[SerializeField, IsntNull]  NoiseGeneratorAbstract clipNoise;
-        
-		public override float GetPoint(float x, float y)
-		{
-			if ( clipNoise.GetPoint(x, y) < 0)
-				return 0;
-			else
-				return  noise.GetPoint(x, y);
-		}
-	}
+    [CreateAssetMenu(fileName = "Clip")]
+    public sealed class Clip : Function3D
+    {
+        [SerializeField, IsntNull] Function3D noise;
+        [SerializeField, IsntNull] Function3D clipNoise;
+
+        public override float GetValue(Vector3 p)
+        {
+            if (clipNoise.GetValue(p) < 0)
+                return 0;
+            else
+                return noise.GetValue(p);
+        }
+    }
 }
