@@ -4,15 +4,13 @@ namespace Game.GameMath
 {
     public class PerlinNoise3D
     {
-        private int[] permutation;
-        private int[] p;
+        int[] p;
 
         public PerlinNoise3D(int seed = 0)
         {
             Random random = new Random(seed);
-            permutation = new int[256];
+            int[] permutation = new int[256];
 
-            // Заполняем массив последовательными числами
             for (int i = 0; i < 256; i++)
             {
                 permutation[i] = i;
@@ -33,6 +31,9 @@ namespace Game.GameMath
             }
         }
 
+        /// <summary>
+        /// Noise value [-1,1]
+        /// </summary> 
         public float Noise(float x, float y, float z)
         {
             // Находим единичный куб, содержащий точку
@@ -86,7 +87,10 @@ namespace Game.GameMath
             return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
         }
 
-        // Метод для получения октавного шума (фрактальный шум)
+        /// <summary>
+        /// Метод для получения октавного шума (фрактальный шум)
+        /// Noise value [-1,1]
+        /// </summary>  
         public float FractalNoise(float x, float y, float z, int octaves = 4, float persistence = 0.5f)
         {
             float total = 0;

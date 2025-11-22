@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffd43c65e49a8f8428af0957d38e093e, type: 3}
+  m_Name: TerrainGenerator
+  m_EditorClassIdentifier: 
+  fieldSettings: {fileID: 11400000, guid: 8da5a57f59087b549bf5f8b5d4003e1f, type: 2}
+  blockCollection: {fileID: 11400000, guid: b7eb962cf96f9134b9e69b4386f67ef6, type: 2}
+  worldOffset: 725
+  perlinSeed: 1
+  octaves: 3
+  perlinOffset: 0
+  perlinScale: 0.05
+  waterHeight: 25
+  waterRadius: 25
+  noizePerlinScale: 0.2
+  noizePerlinClip: 0.55
+  showUnderground: 1

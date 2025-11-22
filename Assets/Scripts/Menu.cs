@@ -21,10 +21,10 @@ namespace Terraria
         [ContextMenu("RedrawAll")]
         public void RedrawAll()
         {
-            var allDrawers = GameObject.FindObjectsOfType<NoiseDrawer>();
+            var allDrawers = GameObject.FindObjectsOfType<TerrainDrawer>();
             foreach (var drawer in allDrawers)
-                drawer.Draw();
-            
+                drawer.Init();
+
             Debug.Log("Draw");
         }
     }

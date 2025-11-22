@@ -5,14 +5,16 @@ namespace Terraria
 {
     public class CameraStartPosition : MonoBehaviour
     {
-        [SerializeField] Camera thisCamera;
-        [SerializeField] NoiseDrawer noiseDrawer;
+        [SerializeField] Camera targetCamera;
+        [SerializeField] Transform cameraOwnerTransform;
+        [SerializeField] TerrainDrawer noiseDrawer;
 
-
-        void Start()
+        public void UpdatePosition()
         {
-            transform.position = (Vector3)noiseDrawer.Center + Vector3.back * 10;
-            thisCamera.orthographicSize = noiseDrawer.FieldSettings.Size.magnitude / 4f;
+            float degToRad = Mathf.PI / 180f;
+            cameraOwnerTransform.position = noiseDrawer.Center;
+            float distance = (noiseDrawer.FieldSettings.Size.y / 2f) / (Mathf.Tan(degToRad * targetCamera.fieldOfView / 2f));
+            targetCamera.transform.position = (Vector3)noiseDrawer.Center + Vector3.back * noiseDrawer.FieldSettings.Size.z / 2 - Vector3.forward * distance;
         }
     }
 }

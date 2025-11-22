@@ -15,10 +15,13 @@ MonoBehaviour:
   blocks:
   - name: 2
     prefab: {fileID: 64192634830717988, guid: ed0e89ba531b1a74cb64f030fd9b02c9, type: 3}
-    density: 0
+    density: 1
   - name: 3
     prefab: {fileID: 3335016545192322002, guid: 7bb796284a3d19240ad9027c32c22810, type: 3}
     density: 0
   - name: 4
     prefab: {fileID: 1034280290834878401, guid: e17f05717ee433e4bbf6f38978d4e3e2, type: 3}
-    density: 0
+    density: 0.3
+  - name: 5
+    prefab: {fileID: 1134170379778971715, guid: 62a13c26c1bed8948bbad0fe6bd3fcdb, type: 3}
+    density: 1

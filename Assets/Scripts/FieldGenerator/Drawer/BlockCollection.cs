@@ -6,33 +6,22 @@ namespace FieldGenerator
     public class BlockCollection : ScriptableObject
     {
         [SerializeField]
-        DencityToBlock[] blocks;
+        BlockInfo[] blocks;
 
-        public GameObject GetBlockByName(BlockName name)
+        public BlockInfo GetBlockByName(BlockName name)
         {
             foreach (var block in blocks)
             {
                 if (block.name == name)
-                    return block.prefab;
+                    return block;
             }
 
             throw new System.Exception($"Block '{name}' not found");
         }
-
-        public GameObject GetBlockByDensity(float density)
-        {
-            if (density == 0)
-                return null;
-
-            if (density > 0.5f)
-                return GetBlockByName(BlockName.Stone);
-
-            return GetBlockByName(BlockName.Ground);
-        }
     }
 
     [System.Serializable]
-    public class DencityToBlock
+    public class BlockInfo
     {
         public BlockName name;
         public GameObject prefab;
@@ -45,7 +34,8 @@ namespace FieldGenerator
         Air = 1,
         Grass,
         Ground,
-        Stone
+        Stone,
+        Coal
     }
 
 }
