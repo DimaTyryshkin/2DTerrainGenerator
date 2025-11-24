@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: FieldSetting
   m_EditorClassIdentifier: 
   marker: {fileID: 9102061690234185136, guid: e6cbe49d5d528a241b4e060fcaaed5aa, type: 3}
-  size: {x: 50, y: 50, z: 50}
+  size: {x: 250, y: 50, z: 250}

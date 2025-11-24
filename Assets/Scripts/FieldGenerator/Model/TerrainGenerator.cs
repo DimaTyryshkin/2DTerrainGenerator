@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using FieldGenerator.Terraria.NoiseGeneration;
-using Game.GameMath;
 using GamePackages.Core.Validation;
+using GamePackages.GamePackagesMath;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Assertions;

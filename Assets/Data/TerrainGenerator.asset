@@ -23,4 +23,4 @@ MonoBehaviour:
   waterRadius: 25
   noizePerlinScale: 0.2
   noizePerlinClip: 0.55
-  showUnderground: 1
+  showUnderground: 0

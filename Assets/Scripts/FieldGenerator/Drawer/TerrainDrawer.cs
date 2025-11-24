@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using FieldGenerator.Terraria.NoiseGeneration;
 using GamePackages.Core;
 using GamePackages.Core.Validation;
@@ -24,8 +23,11 @@ namespace FieldGenerator
         [Header("Debug")]
         [SerializeField] Vector3Int cell;
         [SerializeField] BlockName blockName;
+        [SerializeField] bool isGpuInstancing;
+        [SerializeField] int gpuGroupSize;
 
         DynamicObjectPool pool;
+        GpuInstancer gpuInstancer;
         Transform squaresRoot;
         Transform markersRoot;
         TerrainGrid terrainGrid;
@@ -41,11 +43,18 @@ namespace FieldGenerator
             Init();
         }
 
+        private void Update()
+        {
+            if (isGpuInstancing)
+                gpuInstancer.Draw();
+        }
+
         public void Init()
         {
             float offset = 0.5f;
             this.offset = new Vector3(offset, offset, offset);
             pool = DynamicObjectPool.GetInst();
+            gpuInstancer = GpuInstancer.GetInst(gpuGroupSize);
 
             DrawTerrain();
 
@@ -72,6 +81,8 @@ namespace FieldGenerator
 
             watch.Stop();
             Debug.Log($"Draw '{watch.Elapsed.TotalSeconds}' sec");
+
+            gpuInstancer.LogObjectsAmount();
         }
 
         public void MarkSky(Vector3Int cell)
@@ -84,25 +95,25 @@ namespace FieldGenerator
         }
 
 
-        public void HideInvisible()
-        {
-            int n = 0;
+        //public void HideInvisible()
+        //{
+        //    int n = 0;
 
-            foreach (TerrainItem tCell in terrainGrid.items)
-            {
-                if (!tCell.block)
-                    continue;
+        //    foreach (TerrainItem tCell in terrainGrid.items)
+        //    {
+        //        if (!tCell.block)
+        //            continue;
 
-                terrainGrid.GetNearIndexes(tCell, ref nearIndexes);
-                if (nearIndexes.Count == 6 && nearIndexes.All(n => terrainGrid.items[n].density > 0))
-                {
-                    pool.Return(tCell.block);
-                    n++;
-                }
-            }
+        //        terrainGrid.GetNearIndexes(tCell, ref nearIndexes);
+        //        if (nearIndexes.Count == 6 && nearIndexes.All(n => terrainGrid.items[n].density > 0))
+        //        {
+        //            pool.Return(tCell.block);
+        //            n++;
+        //        }
+        //    }
 
-            Debug.Log($"'{n}' objects is hidden");
-        }
+        //    Debug.Log($"'{n}' objects is hidden");
+        //}
 
         List<int> nearIndexes = new();
         bool IsCellInvisible(Vector3Int cell)
@@ -172,13 +183,20 @@ namespace FieldGenerator
         [Button]
         void ClearTerrain()
         {
-            pool.ReturnAll();
+            if (isGpuInstancing)
+            {
+                gpuInstancer.RemoveAll();
+            }
+            else
+            {
+                pool.ReturnAll();
 
-            if (squaresRoot)
-                DestroyImmediate(squaresRoot.gameObject);
+                if (squaresRoot)
+                    DestroyImmediate(squaresRoot.gameObject);
 
-            if (markersRoot)
-                DestroyImmediate(markersRoot.gameObject);
+                if (markersRoot)
+                    DestroyImmediate(markersRoot.gameObject);
+            }
         }
 
         Transform CreateRoot(Transform oldRoot, string rootName)
@@ -208,13 +226,21 @@ namespace FieldGenerator
             }
         }
 
-        GameObject InstatniateBlock(Vector3Int cell, GameObject prefab)
+        void InstatniateBlock(Vector3Int cell, GameObject prefab)
         {
-            GameObject block = pool.Get(prefab, squaresRoot);
-            int index = terrainGrid.CellToIndex(cell);
-            block.transform.position = CellToWorldPos(cell);
-            terrainGrid.items[index].block = block;
-            return block;
+            Vector3 pos = CellToWorldPos(cell);
+
+            if (isGpuInstancing)
+            {
+                gpuInstancer.Add(prefab, pos);
+            }
+            else
+            {
+                GameObject block = pool.Get(prefab, squaresRoot);
+                int index = terrainGrid.CellToIndex(cell);
+                block.transform.position = pos;
+                terrainGrid.items[index].block = block;
+            }
         }
 
         Vector3 CellToWorldPos(Vector3Int c)

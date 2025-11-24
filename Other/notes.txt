@@ -1,0 +1,1 @@
+GPU Instancing max object count = 1.048.575

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e22fb474f69fb54983e6886174ffc79, type: 3}
+  m_Name: NoizeMixerTool
+  m_EditorClassIdentifier: 
+  elements: []
+  maxWidthOnGui: 1000
+  clamp: 0.02
+  fr: 0.01
+  am: 620
+  mapSize: {x: 1000, y: 1000}
+  octaves:
+  - frequency: 0.01
+    amplitude: 0
+  - frequency: 0.01
+    amplitude: 0
+  - frequency: 0.02
+    amplitude: 0.25
+  - frequency: 0.04
+    amplitude: 0
+  - frequency: 0.08
+    amplitude: 0
