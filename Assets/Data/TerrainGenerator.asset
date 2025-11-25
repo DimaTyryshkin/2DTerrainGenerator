@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fieldSettings: {fileID: 11400000, guid: 8da5a57f59087b549bf5f8b5d4003e1f, type: 2}
   blockCollection: {fileID: 11400000, guid: b7eb962cf96f9134b9e69b4386f67ef6, type: 2}
-  worldOffset: 725
+  worldOffset: 905
   perlinSeed: 1
   octaves: 3
   perlinOffset: 0
   perlinScale: 0.05
-  waterHeight: 25
+  waterHeight: 128
   waterRadius: 25
   noizePerlinScale: 0.2
   noizePerlinClip: 0.55
-  showUnderground: 0
+  showUnderground: 1

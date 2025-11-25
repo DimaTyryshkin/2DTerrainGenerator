@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69157848eb874ddd8032730de7cce232, type: 3}
-  m_Name: Clip
+  m_Script: {fileID: 11500000, guid: 4c2109e8b8a0c73488b5ae9aa209ebda, type: 3}
+  m_Name: DefaultPalette
   m_EditorClassIdentifier: 
-  noise: {fileID: 11400000, guid: d4b17b6e65723f647afed1713546a1dc, type: 2}
-  clipNoise: {fileID: 11400000, guid: a95cf22574a264c4883f762e0e184ba6, type: 2}
+  isLevelDesignPalette: 0
+  hideInPaletteWindow: 0
+  objects: []
+  subPalettes: []

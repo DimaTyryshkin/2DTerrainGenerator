@@ -14,18 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   elements: []
   maxWidthOnGui: 1000
-  clamp: 0.02
+  clamp: 0.6
   fr: 0.01
   am: 620
-  mapSize: {x: 1000, y: 1000}
+  offset: {x: 0, y: 0}
+  mapSize: {x: 1024, y: 2048}
+  drawChanks: 1
   octaves:
+  - frequency: 0.005
+    amplitude: 1
   - frequency: 0.01
-    amplitude: 0
-  - frequency: 0.01
-    amplitude: 0
+    amplitude: 0.5
   - frequency: 0.02
     amplitude: 0.25
   - frequency: 0.04
-    amplitude: 0
+    amplitude: 0.125
   - frequency: 0.08
-    amplitude: 0
+    amplitude: 0.0625
+  - frequency: 0.16
+    amplitude: 0.06125

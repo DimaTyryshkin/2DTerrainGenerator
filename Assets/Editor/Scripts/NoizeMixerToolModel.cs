@@ -12,7 +12,9 @@ namespace Game.NoizeMixerTool
         public float clamp = 0.5f;
         public float fr = 1;
         public float am = 1;
+        public Vector2Int offset;
         public Vector2Int mapSize;
+        public bool drawChanks;
         public Octave[] octaves;
 
         public Texture2D[] DrawOctaves()
@@ -34,15 +36,41 @@ namespace Game.NoizeMixerTool
                       octave.amplitude);
         }
 
+        public Texture2D DrawChanks(Texture2D texture, Vector2Int offset, int chankSize, Color color)
+        {
+            int width = texture.width;
+            int height = texture.height;
+
+            int startX = chankSize - offset.x % chankSize;
+            int startY = chankSize - offset.y % chankSize;
+
+            // vertical lines
+            for (int x = startX; x < width; x += chankSize)
+            {
+                for (int y = 0; y < height; y++)
+                    texture.SetPixel(x, y, color);
+            }
+
+            // horizont lines
+            for (int y = startY; y < height; y += chankSize)
+            {
+                for (int x = 0; x < width; x++)
+                    texture.SetPixel(x, y, color);
+            }
+
+            texture.Apply();
+            return texture;
+        }
+
         public Texture2D DrawPerlinNoize(int w, int h, float frequency, float amplitude)
         {
-            Texture2D texture = new Texture2D(w, h);
+            Texture2D texture = CreeateTexture(w, h);
 
             for (int x = 0; x < w; x++)
             {
                 for (int y = 0; y < h; y++)
                 {
-                    float value = amplitude * Mathf.PerlinNoise(x * frequency, y * frequency);
+                    float value = amplitude * Mathf.PerlinNoise((x + offset.x) * frequency, (y + offset.x) * frequency);
                     Color color = new Color(value, value, value);
 
                     texture.SetPixel(x, y, color);
@@ -57,7 +85,7 @@ namespace Game.NoizeMixerTool
         {
             float offsetX = 100000;
             float offsetY = 50000;
-            Texture2D texture = new Texture2D(w, h);
+            Texture2D texture = CreeateTexture(w, h);
 
             for (int x = 0; x < w; x++)
             {
@@ -109,8 +137,8 @@ namespace Game.NoizeMixerTool
         }
 
         public Texture2D ShowWhite(Texture2D texture) => ReplaceColor(texture, Color.white, Color.magenta);
-        public Texture2D ShowDark(Texture2D texture) => ReplaceColor(texture, Color.black, Color.magenta);
 
+        public Texture2D ShowDark(Texture2D texture) => ReplaceColor(texture, Color.black, Color.magenta);
 
         public Texture2D Operation(Texture2D texture, Func<Color, Color> func)
         {
@@ -215,7 +243,7 @@ namespace Game.NoizeMixerTool
                 }
             }
 
-            Texture2D texture = new Texture2D(width, height);
+            Texture2D texture = CreeateTexture(width, height);
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
@@ -230,6 +258,13 @@ namespace Game.NoizeMixerTool
                 }
             }
             texture.Apply();
+            return texture;
+        }
+
+        public Texture2D CreeateTexture(int width, int height)
+        {
+            Texture2D texture = new Texture2D(width, height);
+            texture.filterMode = FilterMode.Point;
             return texture;
         }
     }
