@@ -1,16 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using FieldGenerator.Terraria.NoiseGeneration;
+﻿using FieldGenerator.Terraria.NoiseGeneration;
 using GamePackages.Core.Validation;
 using GamePackages.GamePackagesMath;
-using NaughtyAttributes;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace FieldGenerator
 {
-    [CreateAssetMenu(menuName = "Game/TerrainGenerator")]
-    class TerrainGenerator : ScriptableObject
+    struct WorldPoint2D
+    {
+        public float h;
+        public BlockName block;
+    }
+
+    [CreateAssetMenu(menuName = "Game/ChunkGenerator")]
+    class ChunkGenerator : ScriptableObject
     {
         public Vector3Int MinDensityCell { get; private set; }
         public Vector3Int MaxDensityCell { get; private set; }
@@ -20,8 +25,7 @@ namespace FieldGenerator
         [SerializeField, IsntNull] TerrainCommon fieldSettings;
         [SerializeField, IsntNull] BlockCollection blockCollection;
 
-        [Header("World")]
-        [SerializeField] int worldOffset;
+
 
         [Header("MainPerlin")]
         [SerializeField] int perlinSeed = 1;
@@ -38,24 +42,64 @@ namespace FieldGenerator
         [Header("Drawing")]
         public bool showUnderground;
 
+        Vector2Int position2D;
 
-        TerrainGrid grid;
-
-        public void Generate(TerrainGrid grid)
+        public void Generate(Vector2Int position2D, TerrainGrid grid, WorldPoint2D[,] heightMap)
         {
+            this.position2D = position2D;
             Assert.IsNotNull(grid);
 
-            this.grid = grid;
+            GenerateFromHeightMap(grid, heightMap);
 
-
-            GenerateDencity();
+            //GenerateDencity(grid);
             //FillAir();
 
-            ReplaceGras();
-            InsertCoal();
+            ReplaceGras(grid);
+            //InsertCoal(grid);
         }
 
-        void GenerateDencity()
+        void GenerateFromHeightMap(TerrainGrid grid, WorldPoint2D[,] heightMap)
+        {
+            BlockInfo groundInfo = blockCollection.GetBlockByName(BlockName.Ground);
+            BlockInfo stoneInfo = blockCollection.GetBlockByName(BlockName.Stone);
+
+            int groundWidth = 3;
+
+            for (int x = 0; x < Chunk.chunkSize; x++)
+            {
+                for (int z = 0; z < Chunk.chunkSize; z++)
+                {
+                    WorldPoint2D point = heightMap[x, z];
+                    int groundHeight = (int)(point.h * Chunk.chunkHeight);
+
+                    for (int y = 0; y < Chunk.chunkHeight; y++)
+                    {
+                        Vector3Int cell = new Vector3Int(x, y, z);
+                        TerrainItem item = new TerrainItem(cell, 1);
+
+                        if (y < groundHeight - groundWidth)
+                        {
+                            item.blockName = BlockName.Stone;
+                            item.density = 1;
+                        }
+                        else if (y < groundHeight)
+                        {
+                            item.blockName = BlockName.Ground;
+                            item.density = 1;
+                        }
+                        else
+                        {
+                            item.blockName = BlockName.Air;
+                            item.density = 0;
+                        }
+
+                        grid[cell] = item;
+                    }
+                }
+            }
+        }
+
+        void GenerateDencity(TerrainGrid grid)
         {
             Vector3Int minDensityCell = new Vector3Int(0, 0, 0);
             Vector3Int maxDensityCell = minDensityCell;
@@ -125,13 +169,13 @@ namespace FieldGenerator
             MaxDensityCell = maxDensityCell;
         }
 
-        void ReplaceGras()
+        void ReplaceGras(TerrainGrid grid)
         {
-            foreach (int index in FindGras())
+            foreach (int index in FindGras(grid))
                 grid.items[index].blockName = BlockName.Grass;
         }
 
-        void InsertCoal()
+        void InsertCoal(TerrainGrid grid)
         {
             PerlinNoise3D noizePerlin = new PerlinNoise3D(perlinSeed + 1);
 
@@ -161,7 +205,7 @@ namespace FieldGenerator
             }
         }
 
-        void FillAir()
+        void FillAir(TerrainGrid grid)
         {
             for (int index = 0; index < grid.CellCount; index++)
                 if (grid.items[index].blockName == BlockName.Unknown)
@@ -170,15 +214,15 @@ namespace FieldGenerator
 
         public float ScalePerlin(PerlinNoise3D perlin, Vector3 p, float scale)
         {
-            return perlin.Noise((p.x + worldOffset) * scale, p.y * scale, p.z * scale);
+            return perlin.Noise((p.x + position2D.x) * scale, p.y * scale, (p.z + position2D.y) * scale);
         }
 
         public float ScaleFractalPerlin(PerlinNoise3D perlin, Vector3 p, float scale)
         {
-            return perlin.FractalNoise((p.x + worldOffset) * scale, p.y * scale, p.z * scale, octaves: octaves);
+            return perlin.FractalNoise((p.x + position2D.x) * scale, p.y * scale, (p.z + position2D.y) * scale, octaves: octaves);
         }
 
-        public List<int> FindGras()
+        public List<int> FindGras(TerrainGrid grid)
         {
             List<int> result = new(2048);
             foreach (TerrainItem terrainCell in grid.items)
@@ -188,25 +232,25 @@ namespace FieldGenerator
                     Vector3Int up = grid.GetUpCell(terrainCell.cell);
 
                     if (grid.IsCellExist(up) && grid[up].blockName == BlockName.Air)
-                        result.Add(CellToIndex(terrainCell));
+                        result.Add(grid.CellToIndex(terrainCell));
                 }
             }
 
             return result;
         }
 
-        public List<TerrainVoid> FindVoids()
+        public List<TerrainVoid> FindVoids(TerrainGrid grid)
         {
-            Grid<WaveItem> waveGrid = GetWaveGrid();
+            Grid<WaveItem> waveGrid = GetWaveGrid(grid);
             List<TerrainVoid> terrainVoids = new List<TerrainVoid>(32);
             foreach (TerrainItem terrainCell in grid.items)
             {
                 if (terrainCell.density <= 0 && waveGrid[terrainCell.cell].group < 0)
                 {
-                    List<TerrainItem> newVoidCells = Wave(terrainCell.cell);
+                    List<TerrainItem> newVoidCells = Wave(terrainCell.cell, grid);
                     foreach (TerrainItem voidCell in newVoidCells)
                     {
-                        waveGrid.items[CellToIndex(voidCell)].group = terrainVoids.Count;
+                        waveGrid.items[grid.CellToIndex(voidCell)].group = terrainVoids.Count;
                     }
 
                     TerrainVoid newVoid = new TerrainVoid(newVoidCells, terrainVoids.Count);
@@ -217,22 +261,10 @@ namespace FieldGenerator
             return terrainVoids;
         }
 
-        int CellToIndex(WaveItem item)
-        {
-            return grid.CellToIndex(item.cell);
-        }
 
-        int CellToIndex(TerrainItem item)
-        {
-            return grid.CellToIndex(item.cell);
-        }
 
-        int CellToIndex(Vector3Int cell)
-        {
-            return grid.CellToIndex(cell);
-        }
 
-        Grid<WaveItem> GetWaveGrid()
+        Grid<WaveItem> GetWaveGrid(TerrainGrid grid)
         {
             Grid<WaveItem> waveGrid = new Grid<WaveItem>(grid.Size);
 
@@ -242,14 +274,14 @@ namespace FieldGenerator
             return waveGrid;
         }
 
-        public List<TerrainItem> Wave(Vector3Int cell)
+        public List<TerrainItem> Wave(Vector3Int cell, TerrainGrid grid)
         {
-            Grid<WaveItem> waveGrid = GetWaveGrid();
+            Grid<WaveItem> waveGrid = GetWaveGrid(grid);
 
             var result = new List<TerrainItem>(waveGrid.CellCount);
             var nearIndex = new List<int>(6);
             var queue = new Queue<int>(waveGrid.CellCount);
-            int index = CellToIndex(cell);
+            int index = grid.CellToIndex(cell);
             queue.Enqueue(index);
             waveGrid.items[index].distance = 0;
 
@@ -278,17 +310,10 @@ namespace FieldGenerator
         }
 
 #if UNITY_EDITOR
-        [Button]
+        //[Button]
         void Draw()
         {
-            FindObjectOfType<TerrainDrawer>().DrawTerrain();
-        }
-
-        [Button]
-        void MoveWorld()
-        {
-            worldOffset += 5;
-            Draw();
+            //FindObjectOfType<TerrainDrawer>().DrawTerrain();
         }
 #endif
     }

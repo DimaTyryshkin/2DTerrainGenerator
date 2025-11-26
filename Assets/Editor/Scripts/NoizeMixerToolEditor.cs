@@ -1,6 +1,6 @@
-using System.Linq;
 using GamePackages.Core;
 using GamePackages.Core.ScriptableObjectEditors.Editor;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -22,6 +22,9 @@ namespace Game.NoizeMixerTool
             {
                 if (GUILayout.Button("ReDraw"))
                     DrawTextures();
+
+                if (GUILayout.Button("To Zero"))
+                    offset = Vector2.zero;
 
             }
             GUILayout.EndHorizontal();
@@ -72,13 +75,21 @@ namespace Game.NoizeMixerTool
 
         private void DrawTextures()
         {
-            textures = asset.DrawOctaves();
+            Vector2Int offset = Vector2Int.zero;
+
+            textures = asset.DrawOctaves(asset.mapSize.x, asset.mapSize.y, offset);
+            sumTexture = asset.DrawMainTexture(asset.mapSize.x, asset.mapSize.y, offset);
+            sumTexture = asset.Normilize(sumTexture);
+
+            if (asset.drawChanks)
+                sumTexture = asset.DrawChanks(sumTexture, offset, Color.magenta);
+
+            return;
             sumTexture = asset.SumTextures(textures);
-            //sumTexture = asset.Normilize(sumTexture);
 
             float clamp = asset.clamp;
             Color clampColor = new Color(clamp, clamp, clamp, 1);
-            //sumTexture = asset.Normilize(sumTexture);
+
             sumTexture = asset.Clamp(sumTexture, clampColor, Color.white);
             sumTexture = asset.Normilize(sumTexture);
             //sumTexture = asset.DrawPerlinNoize2(
@@ -90,7 +101,7 @@ namespace Game.NoizeMixerTool
             //sumTexture = asset.Normilize(sumTexture);
             sumTexture = asset.ReplaceColor(sumTexture, Color.black, Color.blue);
             if (asset.drawChanks)
-                sumTexture = asset.DrawChanks(sumTexture, asset.offset, 16, Color.magenta);
+                sumTexture = asset.DrawChanks(sumTexture, offset, Color.magenta);
 
             //sumTexture = asset.ShowWhite(sumTexture);
             //sumTexture = asset.ShowDark(sumTexture);
