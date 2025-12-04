@@ -14,7 +14,7 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 1
+  m_Fog: 0
   m_FogColor: {r: 0, g: 0, b: 0, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.015
@@ -213,7 +213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2299519e50504044db7080777ddf19e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  visibilityRadius: 5
+  visibilityRadius: 2
   player: {fileID: 569525763}
   model: {fileID: 11400000, guid: d11f41c32adfc2d42af3b4e8bdd77faa, type: 2}
   blockCollection: {fileID: 11400000, guid: b7eb962cf96f9134b9e69b4386f67ef6, type: 2}
@@ -509,7 +509,7 @@ Transform:
   m_GameObject: {fileID: 569525762}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 150, z: 0}
+  m_LocalPosition: {x: 0, y: 130, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

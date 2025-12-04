@@ -24,11 +24,16 @@ namespace FieldGenerator
             grid = new TerrainGrid(new Vector3Int(chunkSize, chunkHeight, chunkSize));
         }
 
-        public void Generate(ChunkGenerator chunkGenerator, BlockCollection blockCollection, WorldPoint2D[,] heightMap)
+        public void Generate(ChunkGenerator chunkGenerator, WorldPoint2D[,] heightMap)
         {
             Assert.IsNotNull(heightMap);
             chunkGenerator.Generate(position2D, grid, heightMap);
-            DrawForGame(blockCollection, chunkGenerator.showUnderground);
+        }
+
+
+        public void InitGpuInstancer(BlockCollection blockCollection, ChunkGenerator chunkGenerator)
+        {
+            InitGpuInstancerForGame(blockCollection, chunkGenerator.showUnderground);
             grid = null;
         }
 
@@ -37,7 +42,7 @@ namespace FieldGenerator
             gpuInstancer.Draw();
         }
 
-        void DrawForGame(BlockCollection blockCollection, bool showUnderground)
+        void InitGpuInstancerForGame(BlockCollection blockCollection, bool showUnderground)
         {
             foreach (TerrainItem terrainCell in grid.items)
             {
@@ -46,13 +51,13 @@ namespace FieldGenerator
                     if (IsCellInvisible(terrainCell, showUnderground))
                         continue;
 
-                    GameObject prefab = blockCollection.GetBlockByName(terrainCell.blockName).prefab;
+                    GpuInstancerUnit prefab = blockCollection.GetGpuInstancerUnitByName(terrainCell.blockName);
                     InstatniateBlock(terrainCell, prefab);
                 }
             }
         }
 
-        void InstatniateBlock(Vector3Int cell, GameObject prefab)
+        void InstatniateBlock(Vector3Int cell, GpuInstancerUnit prefab)
         {
             Vector3 pos = CellToWorldPos(cell);
             gpuInstancer.Add(prefab, pos);
