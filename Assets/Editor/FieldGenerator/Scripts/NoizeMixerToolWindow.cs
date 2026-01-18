@@ -1,7 +1,7 @@
 ﻿using GamePackages.Core.ScriptableObjectEditors.Editor;
 using UnityEditor.Callbacks;
 
-namespace Game.NoizeMixerTool
+namespace FieldGenerator
 {
     class NoizeMixerToolWindow : ScriptableObjectEditorWindow<NoizeMixerToolModel, NoizeMixerToolEditor, NoizeMixerToolWindow>
     {

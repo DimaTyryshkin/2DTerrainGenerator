@@ -1,21 +1,20 @@
 ﻿using FieldGenerator;
-using Game.NoizeMixerTool;
 using GamePackages.Core;
 using NaughtyAttributes;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Game
 {
-
-
     class VisibleChunks : MonoBehaviour
     {
         [SerializeField] int visibilityRadius;
         [SerializeField] Transform player;
-        [SerializeField] NoizeMixerToolModel model;
         [SerializeField] BlockCollection blockCollection;
         [SerializeField] ChunkGenerator chunkGenerator;
 
@@ -29,19 +28,23 @@ namespace Game
         CancellationTokenSource cancellationTokenSource;
         CancellationToken cancellationToken;
 
-        private void Start()
+        IEnumerator Start()
         {
             blockCollection.Init();
             generationQueue = new ConcurrentQueue<SpawnChunkTask>();
             cellToChunk = new Dictionary<Vector2Int, Chunk>();
             cellToTask = new Dictionary<Vector2Int, SpawnChunkTask>();
 
+            yield return chunkGenerator.GenerateWorld();
+            yield return null;
+
             cancellationTokenSource = new CancellationTokenSource();
             cancellationToken = cancellationTokenSource.Token;
             semaphore = new SemaphoreSlim(0);
+
+            //StartThread();
         }
 
-        [Button]
         void StartThread()
         {
             Thread thread = new Thread(ThreadLoop);
@@ -53,10 +56,27 @@ namespace Game
             cancellationTokenSource.Cancel();
         }
 
+        [Button]
+        public void Generate()
+        {
+            StartCoroutine(chunkGenerator.GenerateWorld());
+        }
 
+
+        public bool log;
         private void Update()
         {
+            if (semaphore == null)
+                return;
+
+            if (log) Debug.Log($"Update==========");
+
+            ProcessTask();
+
             Vector3 pos = player.position;
+            Vector3 n = player.forward;
+            float d = MathExtension.GetPlaneD(player.forward, pos);
+            float k = Mathf.Sqrt(Vector3.Dot(n, n));
 
             Vector2Int chunkCell = new Vector2Int(
               Mathf.RoundToInt((pos.x / Chunk.chunkSize - 0.5f)),
@@ -71,15 +91,32 @@ namespace Game
             int minY = chunkCell.y - visibilityRadius;
             int maxY = chunkCell.y + visibilityRadius;
 
+            int visibilityRadius2Power = visibilityRadius * visibilityRadius;
             bool canSpawnInThisFrame = true;
-            for (int x = minX; x <= maxX; x++)
+            for (int dx = -visibilityRadius; dx <= visibilityRadius; dx++)
             {
-                for (int y = minY; y <= maxY; y++)
+                for (int dy = -visibilityRadius; dy <= visibilityRadius; dy++)
                 {
+                    if ((dx * dx + dy * dy) > visibilityRadius2Power)
+                        continue;
+
+                    int x = chunkCell.x + dx;
+                    int y = chunkCell.y + dy;
+
+                    if (x < 0 || y < 0 || x >= 32 || y >= 32)
+                        continue;
+
+                    //Vector3 chunkWorldPos = new Vector3(x, 0, y) * Chunk.chunkSize + new Vector3(Chunk.chunkSize * 0.5f, 129, Chunk.chunkSize * 0.5f);
+                    //float value = Vector3.Dot(player.forward, chunkWorldPos) + d;
+                    //bool isInvisibleChunk = value / k <= 0;
+                    //if (isInvisibleChunk)
+                    //    continue;
+
                     Vector2Int c = new Vector2Int(x, y);
                     if (cellToChunk.TryGetValue(c, out Chunk chunk))
                     {
                         chunk.Update();
+
                     }
                     else if (canSpawnInThisFrame)
                     {
@@ -92,6 +129,14 @@ namespace Game
                                 Chunk newChunk = task.resutChunk;
                                 //System.Diagnostics.Stopwatch s = System.Diagnostics.Stopwatch.StartNew();
 
+                                Assert.IsNotNull(newChunk);
+                                Assert.IsNotNull(newChunk.grid);
+                                Assert.IsNotNull(newChunk.grid.items);
+
+                                Debug.Log($"newChunk.grid.items.count = {newChunk.grid.items.Length}");
+                                Debug.Log($"newChunk.grid.items.count2 = {newChunk.grid.items.Where(x => x.blockName == BlockName.Ground)}");
+                                Debug.Log(newChunk.grid.items.GroupBy(x => x.blockName).ToStringMultiline("Объекты в чанке", x => $"{x.Key} {x.Count()}"));
+
                                 //s.Stop();
                                 //Debug.Log($"InitGpuInstancer ElapsedTime='{s.Elapsed.TotalMilliseconds}ms'");
                                 cellToChunk[c] = newChunk;
@@ -100,15 +145,14 @@ namespace Game
                         }
                         else
                         {
-                            Vector2Int position2D = c * Chunk.chunkSize;
-                            SpawnChunkTask newTask = new SpawnChunkTask(position2D);
+                            SpawnChunkTask newTask = new SpawnChunkTask(c);
                             cellToTask[c] = newTask;
                             generationQueue.Enqueue(newTask);
 
 
-                            Debug.Log($"Add task");
+                            //Debug.Log($"Add task");
                             semaphore.Release();
-                            Debug.Log($"semaphore.CurrentCount={semaphore.CurrentCount}");
+                            //Debug.Log($"semaphore.CurrentCount={semaphore.CurrentCount}");
                         }
                     }
                 }
@@ -122,39 +166,28 @@ namespace Game
             while (!cancellationToken.IsCancellationRequested)
             {
                 semaphore.Wait(cancellationToken);
-                if (generationQueue.TryDequeue(out SpawnChunkTask task))
-                {
-                    MyTexture2D texture = model.DrawMainTexture(Chunk.chunkSize, Chunk.chunkSize, task.chunkPosition2D);
-                    WorldPoint2D[,] heightMap = TextureToHeightMap(texture);
-                    Chunk newChunk = new Chunk(task.chunkPosition2D);
-                    //task.heightMap = heightMap;
-                    newChunk.Generate(chunkGenerator, heightMap);
-                    newChunk.InitGpuInstancer(blockCollection, chunkGenerator);
-                    task.resutChunk = newChunk;
-                    task.isReady = true;
-                }
+                ProcessTask();
             }
 
             Debug.Log("ThreadLoop stop");
         }
 
-        WorldPoint2D[,] TextureToHeightMap(MyTexture2D texture)
+        void ProcessTask()
         {
-            int width = texture.width;
-            int height = texture.height;
-
-            WorldPoint2D[,] heightMap = new WorldPoint2D[width, height];
-
-            for (int x = 0; x < width; x++)
+            if (generationQueue.TryDequeue(out SpawnChunkTask task))
             {
-                for (int y = 0; y < height; y++)
-                {
-                    Color color = texture[x, y];
-                    heightMap[x, y] = new WorldPoint2D() { h = color.r };
-                }
-            }
+                Debug.Log($"GenerateChunk {task.chunkPosition2D.x} {task.chunkPosition2D.y}");
+                Chunk newChunk = new Chunk(task.chunkPosition2D * Chunk.chunkSize);
+                chunkGenerator.Generate(task.chunkPosition2D, newChunk.grid);
+                Debug.Log(newChunk.grid.items.GroupBy(x => x.blockName).ToStringMultiline("Объекты в чанке", x => $"{x.Key} {x.Count()}"));
+                newChunk.InitGpuInstancer(blockCollection, chunkGenerator);
 
-            return heightMap;
+                Assert.IsNotNull(newChunk);
+                Assert.IsNotNull(newChunk.grid);
+                Assert.IsNotNull(newChunk.grid.items);
+                task.resutChunk = newChunk;
+                task.isReady = true;
+            }
         }
 
         private void OnDrawGizmosSelected()

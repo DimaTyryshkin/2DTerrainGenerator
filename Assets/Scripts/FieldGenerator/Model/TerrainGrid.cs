@@ -11,6 +11,11 @@ namespace FieldGenerator
 
         public static implicit operator Vector3Int(TerrainItem item) => item.cell;
 
+        public override string ToString()
+        {
+            return blockName.ToString();
+        }
+
         public TerrainItem(Vector3Int cell, float density)
         {
             this.cell = cell;

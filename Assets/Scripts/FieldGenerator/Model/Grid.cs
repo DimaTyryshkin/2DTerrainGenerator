@@ -44,7 +44,7 @@ namespace FieldGenerator
         {
             checked
             {
-                return c.x + c.y * xSize + c.z * (xySize);
+                return c.x + c.y * xSize + c.z * xySize;
             }
         }
 

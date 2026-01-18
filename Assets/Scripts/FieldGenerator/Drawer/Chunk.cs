@@ -1,7 +1,6 @@
 ﻿using GamePackages.Core;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace FieldGenerator
 {
@@ -13,7 +12,7 @@ namespace FieldGenerator
 
         public readonly Vector3 position3D;
         public readonly Vector2Int position2D;
-        TerrainGrid grid;
+        public TerrainGrid grid;
         readonly GpuInstancer gpuInstancer;
 
         public Chunk(Vector2Int offest)
@@ -24,17 +23,10 @@ namespace FieldGenerator
             grid = new TerrainGrid(new Vector3Int(chunkSize, chunkHeight, chunkSize));
         }
 
-        public void Generate(ChunkGenerator chunkGenerator, WorldPoint2D[,] heightMap)
-        {
-            Assert.IsNotNull(heightMap);
-            chunkGenerator.Generate(position2D, grid, heightMap);
-        }
-
-
         public void InitGpuInstancer(BlockCollection blockCollection, ChunkGenerator chunkGenerator)
         {
             InitGpuInstancerForGame(blockCollection, chunkGenerator.showUnderground);
-            grid = null;
+            //grid = null;
         }
 
         public void Update()

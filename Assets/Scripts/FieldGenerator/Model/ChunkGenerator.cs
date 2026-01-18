@@ -2,6 +2,7 @@
 using GamePackages.Core.Validation;
 using GamePackages.GamePackagesMath;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -24,6 +25,7 @@ namespace FieldGenerator
 
         [SerializeField, IsntNull] TerrainCommon fieldSettings;
         [SerializeField, IsntNull] BlockCollection blockCollection;
+        [SerializeField, IsntNull] NoizeMixerToolModel model;
 
 
 
@@ -43,60 +45,250 @@ namespace FieldGenerator
         public bool showUnderground;
 
         Vector2Int position2D;
+        TerrainGrid worldGrid;
 
-        public void Generate(Vector2Int position2D, TerrainGrid grid, WorldPoint2D[,] heightMap)
+        public void Generate(Vector2Int position2D, TerrainGrid grid)
         {
-            this.position2D = position2D;
             Assert.IsNotNull(grid);
+            Assert.IsNotNull(grid.items);
+            this.position2D = position2D;
 
-            GenerateFromHeightMap(grid, heightMap);
+            //GenerateForm3Bioms(position2D, grid);
+            //return;
 
-            //GenerateDencity(grid);
-            //FillAir();
+            int xOffset = position2D.x * Chunk.chunkSize;
+            int yOffset = position2D.y * Chunk.chunkSize;
 
-            ReplaceGras(grid);
-            //InsertCoal(grid);
+            for (int x = 0; x < Chunk.chunkSize; x++)
+            {
+                for (int y = 0; y < Chunk.chunkHeight; y++)
+                {
+                    for (int z = 0; z < Chunk.chunkSize; z++)
+                    {
+                        //grid[x, y, z] = worldGrid[x + xOffset, y, z + yOffset];
+
+                        Vector3Int cell = new Vector3Int(x, y, z);
+                        TerrainItem item = new TerrainItem(cell, 1);
+
+                        if (y < 128)
+                        {
+                            item.density = 1;
+                            item.blockName = BlockName.Ground;
+                        }
+                        else
+                        {
+                            item.density = 0;
+                            item.blockName = BlockName.Air;
+                        }
+
+                        //grid[cell] = item;
+                        grid[x, y, z] = item;
+
+                    }
+                }
+            }
         }
 
-        void GenerateFromHeightMap(TerrainGrid grid, WorldPoint2D[,] heightMap)
+        public IEnumerator GenerateWorld()
         {
-            BlockInfo groundInfo = blockCollection.GetBlockByName(BlockName.Ground);
-            BlockInfo stoneInfo = blockCollection.GetBlockByName(BlockName.Stone);
+            MyTexture2D world = model.GenerateWorldMap();
 
-            int groundWidth = 3;
+            //int n = world.width / Chunk.chunkSize;
+            worldGrid = new TerrainGrid(new Vector3Int(world.width, Chunk.chunkHeight, world.height));
+
+            for (int x = 0; x < worldGrid.xSize; x++)
+            {
+                Debug.Log($"progress = {x:000}/{world.width}");
+                yield return null;
+
+                for (int z = 0; z < worldGrid.zSize; z++)
+                {
+                    for (int y = 0; y < worldGrid.ySize; y++)
+                    {
+                        //GenerateFromHeight(worldGrid, x, z, world[x, z].maxColorComponent * 0.02f);
+
+                        Vector3Int cell = new Vector3Int(x, y, z);
+                        TerrainItem item = new TerrainItem(cell, 1);
+
+                        if (y == 128)
+                        {
+                            item.density = 1;
+                            item.blockName = BlockName.Ground;
+                        }
+                        else
+                        {
+                            item.density = 0;
+                            item.blockName = BlockName.Air;
+                        }
+
+                        worldGrid[cell] = item;
+                    }
+                }
+            }
+        }
+
+        void GenerateForm3Bioms(Vector2Int position2D, TerrainGrid grid)
+        {
+            Assert.IsNotNull(grid);
+
+            MyTexture2D texture = model.Draw3Bioms(Chunk.chunkSize, Chunk.chunkSize, position2D);
+            //WorldPoint2D[,] heightMap = TextureToHeightMap(texture);
 
             for (int x = 0; x < Chunk.chunkSize; x++)
             {
                 for (int z = 0; z < Chunk.chunkSize; z++)
                 {
-                    WorldPoint2D point = heightMap[x, z];
-                    int groundHeight = (int)(point.h * Chunk.chunkHeight);
+                    Color color = texture[x, z];
 
-                    for (int y = 0; y < Chunk.chunkHeight; y++)
-                    {
-                        Vector3Int cell = new Vector3Int(x, y, z);
-                        TerrainItem item = new TerrainItem(cell, 1);
-
-                        if (y < groundHeight - groundWidth)
-                        {
-                            item.blockName = BlockName.Stone;
-                            item.density = 1;
-                        }
-                        else if (y < groundHeight)
-                        {
-                            item.blockName = BlockName.Ground;
-                            item.density = 1;
-                        }
-                        else
-                        {
-                            item.blockName = BlockName.Air;
-                            item.density = 0;
-                        }
-
-                        grid[cell] = item;
-                    }
+                    if (color.r > color.g && color.r > color.b)
+                        BiomMountines(x, z, position2D, grid, color);
+                    else if (color.g > color.r && color.g > color.b)
+                        BiomField(x, z, position2D, grid, color);
+                    else
+                        BiomOcean(x, z, position2D, grid, color);
                 }
             }
+        }
+
+        int GetGroundHeight(Color color) => GetGroundHeight(color.maxColorComponent);
+        int GetGroundHeight(float value) => (int)((value * 0.5f + 0.5f) * Chunk.chunkHeight);
+
+
+
+        void BiomMountines(int x, int z, Vector2Int position2D, TerrainGrid grid, Color color)
+        {
+            //int groundHeight = GetGroundHeight(Mathf.Pow(color.maxColorComponent, 2));
+            int groundHeight = GetGroundHeight(color.maxColorComponent * 0.7f);
+
+            for (int y = 0; y < Chunk.chunkHeight; y++)
+            {
+                Vector3Int cell = new Vector3Int(x, y, z);
+                TerrainItem item = new TerrainItem(cell, 1);
+
+                if (y < groundHeight)
+                {
+                    item.blockName = BlockName.Stone;
+                    item.density = 1;
+                }
+                else
+                {
+                    item.blockName = BlockName.Air;
+                    item.density = 0;
+                }
+
+                grid[cell] = item;
+            }
+        }
+
+        void BiomField(int x, int z, Vector2Int position2D, TerrainGrid grid, Color color)
+        {
+            int groundHeight = GetGroundHeight(color * 0.1f);
+            int groundWidth = 3;
+
+            for (int y = 0; y < Chunk.chunkHeight; y++)
+            {
+                Vector3Int cell = new Vector3Int(x, y, z);
+                TerrainItem item = new TerrainItem(cell, 1);
+
+                if (y < groundHeight - groundWidth)
+                {
+                    item.blockName = BlockName.Stone;
+                    item.density = 1;
+                }
+                else if (y < groundHeight)
+                {
+                    item.blockName = BlockName.Ground;
+                    item.density = 1;
+                }
+                else
+                {
+                    item.blockName = BlockName.Air;
+                    item.density = 0;
+                }
+
+                grid[cell] = item;
+            }
+        }
+
+        void BiomOcean(int x, int z, Vector2Int position2D, TerrainGrid grid, Color color)
+        {
+            int groundHeight = GetGroundHeight(0);
+
+            for (int y = 0; y < Chunk.chunkHeight; y++)
+            {
+                Vector3Int cell = new Vector3Int(x, y, z);
+                TerrainItem item = new TerrainItem(cell, 1);
+
+                if (y < groundHeight)
+                {
+                    item.blockName = BlockName.Coal;
+                    item.density = 1;
+                }
+                else
+                {
+                    item.blockName = BlockName.Air;
+                    item.density = 0;
+                }
+
+                grid[cell] = item;
+            }
+        }
+
+
+
+        WorldPoint2D[,] TextureToHeightMap(MyTexture2D texture)
+        {
+            int width = texture.width;
+            int height = texture.height;
+
+            WorldPoint2D[,] heightMap = new WorldPoint2D[width, height];
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    Color color = texture[x, y];
+                    heightMap[x, y] = new WorldPoint2D() { h = color.maxColorComponent };
+                }
+            }
+
+            return heightMap;
+        }
+
+        void GenerateFromHeight(TerrainGrid grid, int x, int z, float height)
+        {
+            //BlockInfo groundInfo = blockCollection.GetBlockByName(BlockName.Ground);
+            //BlockInfo stoneInfo = blockCollection.GetBlockByName(BlockName.Stone);
+
+            int groundWidth = 3;
+            int groundHeight = 100;// (int)(height * Chunk.chunkHeight);
+
+            for (int y = 0; y < Chunk.chunkHeight; y++)
+            {
+                Vector3Int cell = new Vector3Int(x, y, z);
+                TerrainItem item = new TerrainItem(cell, 1);
+                item.blockName = BlockName.Ground;
+                item.density = 1;
+
+                if (y < groundHeight - groundWidth)
+                {
+                    item.blockName = BlockName.Stone;
+                    item.density = 1;
+                }
+                else if (y < groundHeight)
+                {
+                    item.blockName = BlockName.Ground;
+                    item.density = 1;
+                }
+                else
+                {
+                    item.blockName = BlockName.Air;
+                    item.density = 0;
+                }
+
+                grid[cell] = item;
+            }
+
         }
 
         void GenerateDencity(TerrainGrid grid)
@@ -169,7 +361,7 @@ namespace FieldGenerator
             MaxDensityCell = maxDensityCell;
         }
 
-        void ReplaceGras(TerrainGrid grid)
+        void ReplaceAllGras(TerrainGrid grid)
         {
             foreach (int index in FindGras(grid))
                 grid.items[index].blockName = BlockName.Grass;
@@ -222,22 +414,31 @@ namespace FieldGenerator
             return perlin.FractalNoise((p.x + position2D.x) * scale, p.y * scale, (p.z + position2D.y) * scale, octaves: octaves);
         }
 
-        public List<int> FindGras(TerrainGrid grid)
+        List<int> FindGras(TerrainGrid grid)
         {
             List<int> result = new(2048);
             foreach (TerrainItem terrainCell in grid.items)
             {
-                if (terrainCell.blockName == BlockName.Ground)
-                {
-                    Vector3Int up = grid.GetUpCell(terrainCell.cell);
-
-                    if (grid.IsCellExist(up) && grid[up].blockName == BlockName.Air)
-                        result.Add(grid.CellToIndex(terrainCell));
-                }
+                if (CanReplaceWithGrass(grid, terrainCell))
+                    result.Add(grid.CellToIndex(terrainCell));
             }
 
             return result;
         }
+
+        bool CanReplaceWithGrass(TerrainGrid grid, TerrainItem terrainCell)
+        {
+            if (terrainCell.blockName != BlockName.Air)
+            {
+                Vector3Int up = grid.GetUpCell(terrainCell.cell);
+
+                if (grid.IsCellExist(up) && grid[up].blockName == BlockName.Air)
+                    return true;
+            }
+
+            return false;
+        }
+
 
         public List<TerrainVoid> FindVoids(TerrainGrid grid)
         {

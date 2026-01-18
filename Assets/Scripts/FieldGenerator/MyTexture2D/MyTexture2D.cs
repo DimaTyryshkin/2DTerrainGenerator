@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Game.NoizeMixerTool
+namespace FieldGenerator
 {
     public class MyTexture2D
     {

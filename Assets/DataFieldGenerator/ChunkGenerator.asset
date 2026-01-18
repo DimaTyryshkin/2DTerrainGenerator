@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fieldSettings: {fileID: 11400000, guid: 8da5a57f59087b549bf5f8b5d4003e1f, type: 2}
   blockCollection: {fileID: 11400000, guid: b7eb962cf96f9134b9e69b4386f67ef6, type: 2}
+  model: {fileID: 11400000, guid: d11f41c32adfc2d42af3b4e8bdd77faa, type: 2}
   perlinSeed: 1
   octaves: 3
   perlinOffset: 0
